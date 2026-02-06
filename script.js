@@ -74,7 +74,8 @@ document.addEventListener("DOMContentLoaded", () => {
   $("begin-game-btn")?.addEventListener("click", () => {
   if (!isHost || !gameRef) return;
   gameRef.child("phase").set("qa");
-});
+  });
+});  
 
 // ---------- CREATE ROOM ----------
 async function createRoom() {
@@ -185,3 +186,4 @@ function updateBeginButton(players, totalPlayers) {
 }
 
 console.log("✅ Game script ready");
+
