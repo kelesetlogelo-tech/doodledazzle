@@ -71,6 +71,9 @@ function renderRoomHeader(code, joined, total) {
 document.addEventListener("DOMContentLoaded", () => {
   $("createRoomBtn")?.addEventListener("click", createRoom);
   $("joinRoomBtn")?.addEventListener("click", joinRoom);
+  $("begin-game-btn")?.addEventListener("click", () => {
+  if (!isHost || !gameRef) return;
+  gameRef.child("phase").set("qa");
 });
 
 // ---------- CREATE ROOM ----------
@@ -142,7 +145,7 @@ function subscribeToGame(code) {
 
     const players = data.players || {};
     renderRoomHeader(code, Object.keys(players).length, data.numPlayers);
-
+    updateBeginButton(players, data.numPlayers);
     updatePlayerList(players);
     transitionToPhase(data.phase);
   });
@@ -158,4 +161,28 @@ function updatePlayerList(players) {
     .join("");
 }
 
+function updateBeginButton(players, totalPlayers) {
+  const btn = $("begin-game-btn");
+  if (!btn) return;
+
+  // Only host ever sees this button
+  if (!isHost) {
+    btn.classList.add("hidden");
+    return;
+  }
+
+  const joinedCount = Object.keys(players).length;
+
+  if (joinedCount === totalPlayers) {
+    btn.classList.remove("hidden");
+    btn.disabled = false;
+    btn.textContent = "Begin Game";
+  } else {
+    btn.classList.remove("hidden");
+    btn.disabled = true;
+    btn.textContent = `Waiting for players (${joinedCount}/${totalPlayers})`;
+  }
+}
+
 console.log("✅ Game script ready");
+
