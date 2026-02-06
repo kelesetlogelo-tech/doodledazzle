@@ -34,16 +34,27 @@
   </section>
 
   <!-- 🕺 WAITING ROOM -->
-  <section id="waiting" class="page hidden">
-    <h2>Gather your tribe 🪶</h2>
-    <p class="scene-tagline">“Someone’s already side-eyeing the scoreboard.”</p>
-    <div id="room-code-display-game" class="info" onclick="navigator.clipboard.writeText(this.textContent)">
-  Room Code: -----
-</div>
-    <p id="players-count" class="info"></p>
-    <ul id="players-list"></ul>
-    <button id="begin-game-btn" class="vibrant-btn hidden">Begin Game</button>
-  </section>
+ <section id="waiting" class="page hidden waiting-room">
+
+  <header class="waiting-header">
+    <h2 class="waiting-title">🪶 Gather your tribe</h2>
+    <p class="waiting-tagline">
+      “Someone’s already side-eyeing the scoreboard.”
+    </p>
+  </header>
+
+  <main class="waiting-main">
+    <div id="room-code-display-game" class="room-code-pill"></div>
+    <p id="players-count" class="players-count"></p>
+
+    <ul id="players-list" class="players-list"></ul>
+
+    <button id="begin-game-btn" class="vibrant-btn hidden">
+      Begin Game
+    </button>
+  </main>
+
+</section>
 
   <!-- 🎭 Q&A PHASE -->
   <section id="qaPhase" class="page hidden">
@@ -92,6 +103,7 @@
   <script defer src="script.js"></script>
 </body>
 </html>
+
 
 
 
