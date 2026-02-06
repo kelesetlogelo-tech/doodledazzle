@@ -184,15 +184,4 @@ function updateBeginButton(players, totalPlayers) {
   }
 }
 
-document.addEventListener("click", e => {
-  if (e.target.id === "room-code-display-game") {
-    const code = e.target.textContent.replace("Room Code:", "").trim();
-    navigator.clipboard.writeText(code);
-    e.target.textContent = "Copied!";
-    setTimeout(() => {
-      e.target.textContent = code;
-    }, 1000);
-  }
-}
-
 console.log("✅ Game script ready");
