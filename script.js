@@ -1,6 +1,9 @@
 // script.js — cleaned, gradient transitions and full logic restored
 console.log("script.js loaded");
 
+let roomCodeEl;
+let playersCountEl;
+
 const $ = id => document.getElementById(id);
 
 // Helper: find a section element for a phase
@@ -145,13 +148,18 @@ async function createRoom() {
 } catch(e) {}
 
 
-  const roomCodeEl =
-    $("room-code-display-game") ||
-    $("roomCodeDisplay") ||
-    document.querySelector("[data-room-code]"); // fallback
+  roomCodeEl = $("room-code-display-game") || $("roomCodeDisplay");
+  playersCountEl = $("players-count") || $("playersCount");
 
-  if (roomCodeEl) {
-  roomCodeEl.textContent = "Room Code: " + code;
+if (roomCodeEl) {
+  roomCodeEl.textContent = `Room Code: ${code}`;
+  roomCodeEl.style.display = "block";
+}
+
+if (playersCountEl) {
+  playersCountEl.textContent = `Players joined: 1 / ${count}`;
+}
+ " + code;
   } else {
   console.warn("⚠️ No UI element found for room code.");
 }
@@ -328,6 +336,7 @@ function showRevealPhase(data) {
   container.innerHTML = `<h1>🎉 ${winner} wins!</h1>`;
 }
 console.log("✅ Game script ready!");
+
 
 
 
