@@ -157,6 +157,23 @@ body.revealPhase-phase {
   background: linear-gradient(135deg, #ff6a00, #ee0979);
 }
 
+.room-code-pill {
+  background: rgba(0,0,0,0.35);
+  border: 2px dashed #fff;
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.3em;
+  cursor: pointer;
+  margin-bottom: 0.3rem;
+}
+
+.copy-hint {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
 
 
 
