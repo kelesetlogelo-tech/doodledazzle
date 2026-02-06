@@ -39,6 +39,14 @@ function transitionToPhase(phase) {
   document.body.classList.add(`${phase}-phase`);
 }
 
+async function saveAnswersAndMarkReady() {
+  if (!gameRef || !playerId) return;
+  await gameRef.child(`players/${playerId}/ready`).set(true);
+
+  if (phase === "qa" && allReady && isHost) {
+  gameRef.child("phase").set("pre-guess");
+}
+
 // ---------- ROOM HEADER UI ----------
 function renderRoomHeader(code, joined, total) {
   const roomCodeEl = $("room-code-display-game");
@@ -66,6 +74,20 @@ function renderRoomHeader(code, joined, total) {
     countEl.textContent = `Players joined: ${joined} / ${total}`;
   }
 }
+
+  const beginGuessingBtn = $("begin-guessing-btn");
+
+if (beginGuessingBtn) {
+  if (isHost && phase === "pre-guess") {
+    beginGuessingBtn.classList.remove("hidden");
+  } else {
+    beginGuessingBtn.classList.add("hidden");
+  }
+}
+
+  const allReady =
+  numPlayers === total &&
+  Object.values(players).every(p => p.ready === true);
 
 // ---------- DOM READY ----------
 document.addEventListener("DOMContentLoaded", () => {
@@ -186,4 +208,5 @@ function updateBeginButton(players, totalPlayers) {
 }
 
 console.log("✅ Game script ready");
+
 
