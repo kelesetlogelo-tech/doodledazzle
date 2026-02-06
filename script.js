@@ -193,6 +193,6 @@ document.addEventListener("click", e => {
       e.target.textContent = code;
     }, 1000);
   }
-});
+}
 
 console.log("✅ Game script ready");
