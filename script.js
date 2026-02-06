@@ -159,7 +159,7 @@ if (roomCodeEl) {
 if (playersCountEl) {
   playersCountEl.textContent = `Players joined: 1 / ${count}`;
 }
- " + code;
+
   } else {
   console.warn("⚠️ No UI element found for room code.");
 }
@@ -336,6 +336,7 @@ function showRevealPhase(data) {
   container.innerHTML = `<h1>🎉 ${winner} wins!</h1>`;
 }
 console.log("✅ Game script ready!");
+
 
 
 
