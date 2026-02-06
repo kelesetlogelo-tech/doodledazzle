@@ -123,6 +123,73 @@ h3 {
   max-width: 200px;
 }
 
+/* ===== WAITING ROOM LAYOUT ===== */
+
+/* Top heading + tagline */
+.waiting-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.waiting-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.waiting-tagline {
+  margin-top: 1.2rem; /* ~ two lines of space */
+  opacity: 0.85;
+  font-style: italic;
+}
+
+/* Center block */
+.waiting-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Big room code pill */
+.room-code-pill {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  padding: 1rem 2rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  user-select: all;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.room-code-pill:hover {
+  transform: scale(1.05);
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* Players count */
+.players-count {
+  opacity: 0.85;
+  margin-bottom: 1rem;
+}
+
+/* Player list */
+.players-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 0.5rem;
+}
+
+.players-list li {
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0.3rem 0;
+  padding: 0.5rem 1.2rem;
+  border-radius: 0.6rem;
+}
+
+
 /* ===== FOOTER ===== */
 footer {
   position: absolute;
@@ -173,6 +240,7 @@ body.revealPhase-phase {
   font-size: 0.8rem;
   opacity: 0.8;
 }
+
 
 
 
