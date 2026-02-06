@@ -196,5 +196,3 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready");
-
-
