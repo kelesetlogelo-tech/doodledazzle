@@ -248,6 +248,33 @@ body.revealPhase-phase {
   opacity: 0.8;
 }
 
+/* ===== Q&A FIX ===== */
+
+.qa-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.question-text {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #222;              /* 👈 forces visibility */
+  margin-bottom: 2rem;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.option-btn {
+  padding: 0.9rem 1.2rem;
+  font-size: 1rem;
+}
+
 
 
 
