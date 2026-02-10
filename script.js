@@ -310,7 +310,6 @@ function renderQuestion() {
   });
 }
 
-
   container.querySelectorAll(".option-btn").forEach(btn => {
     btn.onclick = async () => {
       await gameRef
@@ -320,7 +319,6 @@ function renderQuestion() {
       renderQuestion();
     };
   });
-}
 
 async function markReady() {
   await gameRef.child(`players/${playerId}/ready`).set(true);
@@ -338,6 +336,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
