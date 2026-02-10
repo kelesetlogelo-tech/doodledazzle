@@ -86,8 +86,6 @@ function beginGameAsHost() {
   startQnAPhase();
 }
 
-
-
 /*************************************************
  * AFTER QUESTION 10 (POINT #5)
  *************************************************/
@@ -95,7 +93,7 @@ function beginGameAsHost() {
 function handleAllQuestionsAnswered() {
   questionTextEl.textContent = "All questions answered 😈";
   answersEl.innerHTML = "";
-  submitBtn.style.display = "block";
+  submitBtn.style.display = "block"; // ✅ NOW IT APPEARS
 }
 
 /*************************************************
@@ -274,13 +272,14 @@ function updateRoomUI(data, code) {
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
-  currentQuestion = 0;
-  answers = {};
+  currentQuestionIndex = 0;      // ✅ RESET INDEX
+  playerAnswers = [];
+  submitBtn.style.display = "none"; // ✅ HIDE SUBMIT BUTTON
   renderQuestion();
 }
 
 function renderQuestion() {
-  const q = QUESTIONS[currentQuestionIndex]; // ✅ MUST BE FIRST
+  const q = questions[currentQuestionIndex]; // ✅ FIXED NAME
 
   if (!q) {
     console.warn("No question found at index", currentQuestionIndex);
@@ -299,7 +298,7 @@ function renderQuestion() {
       playerAnswers[currentQuestionIndex] = option;
       currentQuestionIndex++;
 
-      if (currentQuestionIndex < QUESTIONS.length) {
+      if (currentQuestionIndex < questions.length) {
         renderQuestion();
       } else {
         handleAllQuestionsAnswered();
@@ -309,16 +308,6 @@ function renderQuestion() {
     answersEl.appendChild(btn);
   });
 }
-
-  container.querySelectorAll(".option-btn").forEach(btn => {
-    btn.onclick = async () => {
-      await gameRef
-        .child(`players/${playerId}/answers/${q.id}`)
-        .set(btn.textContent);
-      currentQuestion++;
-      renderQuestion();
-    };
-  });
 
 async function markReady() {
   await gameRef.child(`players/${playerId}/ready`).set(true);
@@ -336,6 +325,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
