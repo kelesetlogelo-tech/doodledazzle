@@ -188,15 +188,7 @@ function renderQuestion() {
   const container = $("qa-container");
   container.innerHTML = "";
 
-  const q = questions[currentQuestion];
-  // If all questions answered, show submit button
-if (!q) {
-  $("qa-container").innerHTML = "<p>All questions answered 🎉</p>";
-  $("submit-answers-btn").classList.remove("hidden");
-  return;
-}
-
-  container.innerHTML = `
+   container.innerHTML = `
   <div class="question-text">
     ${q.text}
   </div>
@@ -205,6 +197,14 @@ if (!q) {
     ${q.options.map(o => `<button class="option-btn">${o}</button>`).join("")}
   </div>
 `;
+
+  const q = questions[currentQuestion];
+  // If all questions answered, show submit button
+if (!q) {
+  $("qa-container").innerHTML = "<p>All questions answered 🎉</p>";
+  $("submit-answers-btn").classList.remove("hidden");
+  return;
+}
 
   container.querySelectorAll(".option-btn").forEach(btn => {
     btn.onclick = async () => {
@@ -233,4 +233,5 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
