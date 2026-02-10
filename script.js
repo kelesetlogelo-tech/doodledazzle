@@ -46,6 +46,13 @@ document.addEventListener("DOMContentLoaded", () => {
       gameRef.child("phase").set("guessing");
     }
   });
+
+  $("submit-answers-btn")?.addEventListener("click", async () => {
+  if (!gameRef || !playerId) return;
+
+  await gameRef.child(`players/${playerId}/ready`).set(true);
+  $("submit-answers-btn").classList.add("hidden");
+  });
 });
 
 // ---------- Page Switching ----------
@@ -182,12 +189,22 @@ function renderQuestion() {
   container.innerHTML = "";
 
   const q = questions[currentQuestion];
-  if (!q) return markReady();
+  // If all questions answered, show submit button
+if (!q) {
+  $("qa-container").innerHTML = "<p>All questions answered 🎉</p>";
+  $("submit-answers-btn").classList.remove("hidden");
+  return;
+}
 
   container.innerHTML = `
-    <h3>${q.text}</h3>
+  <div class="question-text">
+    ${q.text}
+  </div>
+
+  <div class="options">
     ${q.options.map(o => `<button class="option-btn">${o}</button>`).join("")}
-  `;
+  </div>
+`;
 
   container.querySelectorAll(".option-btn").forEach(btn => {
     btn.onclick = async () => {
@@ -216,3 +233,4 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
