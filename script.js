@@ -86,59 +86,7 @@ function beginGameAsHost() {
   startQnAPhase();
 }
 
-/*************************************************
- * START Q&A PHASE (POINT #3)
- *************************************************/
 
-function startQnAPhase() {
-  currentPhase = "qna";
-  currentQuestionIndex = 0;
-  playerAnswers = [];
-
-  submitBtn.style.display = "none";
-
-  renderQuestion();
-}
-
-/*************************************************
- * RENDER QUESTION + ANSWERS (POINT #4)
- *************************************************/
-
-function renderQuestion() {
-  // SAFETY CHECK — prevents blank screen
-  if (!QUESTIONS[currentQuestionIndex]) {
-    console.warn("Invalid question index:", currentQuestionIndex);
-    return;
-  }
-
-  const current = QUESTIONS[currentQuestionIndex];
-
-  // Render question text
-  questionTextEl.textContent = current.text;
-
-  // Clear previous answers
-  answersEl.innerHTML = "";
-
-  // Render answer buttons
-  current.options.forEach(option => {
-    const btn = document.createElement("button");
-    btn.className = "answer-btn";
-    btn.textContent = option;
-
-    btn.addEventListener("click", () => {
-      playerAnswers[currentQuestionIndex] = option;
-      currentQuestionIndex++;
-
-      if (currentQuestionIndex < QUESTIONS.length) {
-        renderQuestion();
-      } else {
-        handleAllQuestionsAnswered();
-      }
-    });
-
-    answersEl.appendChild(btn);
-  });
-}
 
 /*************************************************
  * AFTER QUESTION 10 (POINT #5)
@@ -332,26 +280,36 @@ function startQA() {
 }
 
 function renderQuestion() {
-  const container = $("qa-container");
-  container.innerHTML = "";
+  const q = QUESTIONS[currentQuestionIndex]; // ✅ MUST BE FIRST
 
-   container.innerHTML = `
-  <div class="question-text">
-    ${q.text}
-  </div>
+  if (!q) {
+    console.warn("No question found at index", currentQuestionIndex);
+    return;
+  }
 
-  <div class="options">
-    ${q.options.map(o => `<button class="option-btn">${o}</button>`).join("")}
-  </div>
-`;
+  questionTextEl.textContent = q.text;
+  answersEl.innerHTML = "";
 
-  const q = questions[currentQuestion];
-  // If all questions answered, show submit button
-if (!q) {
-  $("qa-container").innerHTML = "<p>All questions answered 🎉</p>";
-  $("submit-answers-btn").classList.remove("hidden");
-  return;
+  q.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "answer-btn";
+    btn.textContent = option;
+
+    btn.addEventListener("click", () => {
+      playerAnswers[currentQuestionIndex] = option;
+      currentQuestionIndex++;
+
+      if (currentQuestionIndex < QUESTIONS.length) {
+        renderQuestion();
+      } else {
+        handleAllQuestionsAnswered();
+      }
+    });
+
+    answersEl.appendChild(btn);
+  });
 }
+
 
   container.querySelectorAll(".option-btn").forEach(btn => {
     btn.onclick = async () => {
@@ -380,6 +338,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
