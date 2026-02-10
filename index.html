@@ -76,18 +76,28 @@
 
 
    <!-- 🔮 PRE-GUESS PHASE -->
-  <section id="pre-guess" class="page hidden">
-  <h2>Waiting to Guess 🤔</h2>
-  <p class="scene-tagline">
-    “Everyone’s pretending they’re ready. Nobody is.”
-  </p>
+ <div id="waiting-to-guess" class="page hidden">
 
-  <p class="info">Sharpen your instincts… chaos is loading.</p>
+  <div id="waiting-guess-banner">
+    Waiting to Guess...
+  </div>
 
-  <button id="begin-guessing-btn" class="vibrant-btn hidden">
-    Begin Guessing
-  </button>
-</section>
+  <div id="waiting-guess-content">
+    <h2 id="waiting-guess-subheading">
+      Everyone's pretending they're ready — Nobody is!
+    </h2>
+
+    <p id="waiting-guess-tagline">
+      Sharpen your instincts: chaos is loading.......
+    </p>
+
+    <button id="begin-guessing-btn" class="vibrant-btn hidden">
+      Start Guessing
+    </button>
+  </div>
+
+</div>
+
 
   <!-- 🔮 GUESSING PHASE -->
   <section id="guessingPhase" class="page hidden">
@@ -126,6 +136,7 @@
   <script defer src="script.js"></script>
 </body>
 </html>
+
 
 
 
