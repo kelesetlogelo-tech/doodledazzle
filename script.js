@@ -90,10 +90,17 @@ function beginGameAsHost() {
  * AFTER QUESTION 10 (POINT #5)
  *************************************************/
 
-function handleAllQuestionsAnswered() {
+async function handleAllQuestionsAnswered() {
   questionTextEl.textContent = "All questions answered 😈";
   answersEl.innerHTML = "";
-  submitBtn.style.display = "block"; // ✅ NOW IT APPEARS
+
+  // Mark player ready in Firebase
+  if (gameRef && playerId) {
+    await gameRef.child(`players/${playerId}/ready`).set(true);
+  }
+
+  // Transition THIS player immediately
+  transitionToPhase("waiting-to-guess");
 }
 
 /*************************************************
@@ -254,15 +261,13 @@ function updateRoomUI(data, code) {
     numPlayers === total &&
     Object.values(players).every(p => p.ready === true);
 
-  if (phase === "qa" && allReady && isHost) {
-    gameRef.child("phase").set("pre-guess");
-  }
-
-  // Host-only Begin Guessing
+  // If everyone is ready, allow host to start guessing
+if (phase === "waiting-to-guess") {
   $("begin-guessing-btn").classList.toggle(
     "hidden",
-    !(isHost && phase === "pre-guess")
+    !(isHost && allReady)
   );
+}
 
   transitionToPhase(phase);
 
@@ -325,6 +330,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
