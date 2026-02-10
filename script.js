@@ -14,20 +14,167 @@ let currentQuestion = 0;
 let answers = {};
 window.qaStarted = false;
 
+/*************************************************
+ * GAME STATE
+ *************************************************/
+
+let currentPhase = "waiting-room-1";
+let currentQuestionIndex = 0;
+let playerAnswers = [];
+
+/*************************************************
+ * QUESTIONS DATA (10 TOTAL REQUIRED)
+ *************************************************/
 // ---------- Questions ----------
 const questions = [
-  { id: "q1", text: "If I were a sound effect, I'd be:", options: ["Ka-ching!", "Dramatic gasp", "Boing!", "Evil laugh"] },
-  { id: "q2", text: "If I were a weather forecast, I'd be:", options: ["100% chill", "Chance of chaos", "Heatwave vibes", "Sudden drama"] },
-  { id: "q3", text: "If I were a breakfast cereal, I'd be:", options: ["Jungle Oats", "WeetBix", "Rice Krispies", "That weird healthy one"] },
-  { id: "q4", text: "If I were a bedtime excuse, I'd be:", options: ["I need water", "There's a spider", "One more episode", "I'm not tired"] },
-  { id: "q5", text: "If I were a villain, I'd be:", options: ["Grinch", "Thanos", "Mosquito", "Darth Vader"] },
-  { id: "q6", text: "If I were a kitchen appliance:", options: ["Judgy fridge", "Loud microwave", "Toaster of betrayal", "Blender of chaos"] },
-  { id: "q7", text: "If I were a dance move:", options: ["Awkward shuffle", "Kwasakwasa", "Invisible groove", "Knee regret"] },
-  { id: "q8", text: "If I were a text message:", options: ["Late LOL", "K.", "Gif spam", "Voice note typo"] },
-  { id: "q9", text: "If I were a warning label:", options: ["May sing", "May overshare", "Dangerous opinions", "Unfiltered thoughts"] },
-  { id: "q10", text: "If I were a chair:", options: ["Creaky antique", "Snack throne", "Finger trap", "Royal regret"] }
+  { 
+    text: "If I were a sound effect, I'd be:", 
+    options: ["Ka-ching!", "Dramatic gasp", "Boing!", "Evil laugh"] 
+  },
+  { 
+    text: "If I were a weather forecast, I'd be:", 
+    options: ["100% chill", "Chance of chaos", "Heatwave vibes", "Sudden drama"] 
+  },
+  { 
+    text: "If I were a breakfast cereal, I'd be:", 
+    options: ["Jungle Oats", "WeetBix", "Rice Krispies", "That weird healthy one"] 
+  },
+  { 
+    text: "If I were a bedtime excuse, I'd be:", 
+    options: ["I need water", "There's a spider in my room", "One more episode", "I'm not tired", "I can't sleep without Pillow"] 
+  },
+  { 
+    text: "If I were a villain, I'd be:", 
+    options: ["Grinch", "Thanos", "Mosquito", "Darth Vader"] 
+  },
+  { 
+    text: "If I were a kitchen appliance:", 
+    options: ["Judgy fridge", "Loud microwave", "Toaster of betrayal", "Blender of chaos"] 
+  },
+  { 
+    text: "If I were a dance move:", 
+    options: ["Awkward shuffle", "Kwasakwasa", "Invisible groove", "Knee regret"] 
+  },
+  { 
+    text: "If I were a text message:", 
+    options: ["Late LOL", "K.", "Gif spam", "Voice note typo"] 
+  },
+  { 
+    text: "If I were a warning label:", 
+   options: ["May sing", "May overshare", "Dangerous opinions", "Unfiltered thoughts"] 
+  },
+  { 
+    text: "If I were a chair:", 
+    options: ["Creaky antique", "Snack throne", "Finger trap", "Royal regret", "The one that makes a fart sound when you sit"] 
+  }
 ];
 
+/*************************************************
+ * DOM ELEMENT CACHING (POINT #2)
+ *************************************************/
+
+const questionTextEl = document.getElementById("question-text");
+const answersEl = document.getElementById("answer-options");
+const submitBtn = document.getElementById("submit-answers-btn");
+
+/*************************************************
+ * HOST: BEGIN GAME → START Q&A PHASE
+ *************************************************/
+
+function beginGameAsHost() {
+  // transition all players to Q&A phase
+  startQnAPhase();
+}
+
+/*************************************************
+ * START Q&A PHASE (POINT #3)
+ *************************************************/
+
+function startQnAPhase() {
+  currentPhase = "qna";
+  currentQuestionIndex = 0;
+  playerAnswers = [];
+
+  submitBtn.style.display = "none";
+
+  renderQuestion();
+}
+
+/*************************************************
+ * RENDER QUESTION + ANSWERS (POINT #4)
+ *************************************************/
+
+function renderQuestion() {
+  // SAFETY CHECK — prevents blank screen
+  if (!QUESTIONS[currentQuestionIndex]) {
+    console.warn("Invalid question index:", currentQuestionIndex);
+    return;
+  }
+
+  const current = QUESTIONS[currentQuestionIndex];
+
+  // Render question text
+  questionTextEl.textContent = current.text;
+
+  // Clear previous answers
+  answersEl.innerHTML = "";
+
+  // Render answer buttons
+  current.options.forEach(option => {
+    const btn = document.createElement("button");
+    btn.className = "answer-btn";
+    btn.textContent = option;
+
+    btn.addEventListener("click", () => {
+      playerAnswers[currentQuestionIndex] = option;
+      currentQuestionIndex++;
+
+      if (currentQuestionIndex < QUESTIONS.length) {
+        renderQuestion();
+      } else {
+        handleAllQuestionsAnswered();
+      }
+    });
+
+    answersEl.appendChild(btn);
+  });
+}
+
+/*************************************************
+ * AFTER QUESTION 10 (POINT #5)
+ *************************************************/
+
+function handleAllQuestionsAnswered() {
+  questionTextEl.textContent = "All questions answered 😈";
+  answersEl.innerHTML = "";
+  submitBtn.style.display = "block";
+}
+
+/*************************************************
+ * SUBMIT ANSWERS → WAITING ROOM 2
+ *************************************************/
+
+submitBtn.addEventListener("click", () => {
+  submitBtn.style.display = "none";
+  transitionToWaitingRoomTwo();
+});
+
+/*************************************************
+ * WAITING ROOM 2
+ *************************************************/
+
+function transitionToWaitingRoomTwo() {
+  currentPhase = "waiting-to-guess";
+
+  // Example UI updates
+  document.getElementById("waiting-room-title").textContent =
+    "Waiting to Guess";
+
+  document.getElementById("waiting-room-tagline").textContent =
+    "Everyone’s pretending they’re not judging your answers 👀";
+
+  // TODO: sync player readiness via Firebase / WebSocket
+}
 // ---------- DOM Ready ----------
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOM fully loaded ✅");
@@ -233,5 +380,6 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
