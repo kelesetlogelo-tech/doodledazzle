@@ -347,6 +347,52 @@ body.qa-phase {
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
+/* ================================
+   WAITING TO GUESS PHASE
+   ================================ */
+
+body.waiting-to-guess-phase {
+  background: linear-gradient(135deg, #dbeafe, #eef2ff);
+}
+
+/* Banner */
+#waiting-guess-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.2rem;
+  background: #2563eb;
+  color: white;
+  font-size: 1.4rem;
+  font-weight: 800;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Content */
+#waiting-guess-content {
+  margin-top: 10rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#waiting-guess-subheading {
+  margin-top: 5rem; /* 👈 5 lines below banner */
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #111;
+}
+
+#waiting-guess-tagline {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  color: #333;
+  opacity: 0.85;
+}
+
 
 
 
