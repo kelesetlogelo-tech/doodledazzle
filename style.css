@@ -276,16 +276,19 @@ body.revealPhase-phase {
 }
 
 /* ================================
-   Q&A PHASE STYLING
+   Q&A PHASE – FINAL ALIGNMENT
    ================================ */
 
-/* 1️⃣ Pastel purple background */
+/* Pastel purple background */
 body.qa-phase {
   background: linear-gradient(135deg, #e9d5ff, #f3e8ff);
 }
 
-/* 2️⃣ Banner at the top */
+/* Banner fixed at the very top */
 #qa-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   padding: 1.2rem;
   background: #7c3aed;
@@ -293,38 +296,41 @@ body.qa-phase {
   font-size: 1.3rem;
   font-weight: 700;
   text-align: center;
+  z-index: 10;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* 3️⃣ Main Q&A layout */
+/* Main content wrapper */
 #qa-content {
-  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* 4️⃣ Question text */
+/* Question positioning — approx 10 lines below banner */
 #question-text {
+  margin-top: 10rem;        /* 👈 this is your “10 lines” */
   font-size: 1.6rem;
   font-weight: 800;
-  color: #000;               /* 👈 black text */
+  color: #000;
   text-align: center;
   max-width: 600px;
   margin-bottom: 2rem;
 }
 
-/* 5️⃣ Answer options */
+/* Answer options stack */
 #answer-options {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   width: 100%;
   max-width: 420px;
+  align-items: center;
 }
 
-/* 6️⃣ Answer buttons */
+/* Answer buttons */
 .answer-btn {
+  width: 100%;
   padding: 0.9rem 1.2rem;
   font-size: 1rem;
   font-weight: 600;
