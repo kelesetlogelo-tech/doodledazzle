@@ -18,7 +18,7 @@ window.qaStarted = false;
  * GAME STATE
  *************************************************/
 
-let currentPhase = "waiting-room-1";
+let currentPhase = "waiting";
 let currentQuestionIndex = 0;
 let playerAnswers = [];
 
@@ -325,6 +325,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
