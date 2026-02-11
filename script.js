@@ -407,7 +407,7 @@ async function markReady() {
  }
 console.log("targetOrder:", data.targetOrder);
 console.log("currentTargetIndex:", data.currentTargetIndex);
-)
+
 function renderGuessingUI(targetPlayer, data) {
 
   const titleEl = $("guess-target-name");
@@ -492,6 +492,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
