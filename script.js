@@ -238,64 +238,48 @@ function updateRoomUI(data, code) {
   const total = data.numPlayers || 0;
   const numPlayers = Object.keys(players).length;
   const phase = data.phase;
-  const readyCount = Object.values(players)
-  .filter(p => p.ready === true).length;
+  const readyCount = Object.values(players).filter(p => p.ready).length;
+  const allReady = numPlayers === total && Object.values(players).every(p => p.ready);
 
-  // If everyone is ready and phase is still QA
-if (readyCount === total && data.phase === "qa") {
-  if (isHost)
+  // --- Waiting count (useful for host logic) ---
+  const waitingCount = total - readyCount;
 
-const waitingCount = total - readyCount;
-
-if (phase === "waiting-to-guess") {
-
-  showScreen("waiting-room");
-
-  const beginBtn = $("begin-guessing-btn");
-
-  if (isHost && readyCount === total) {
-    beginBtn.classList.remove("hidden");
-  } else {
-    beginBtn.classList.add("hidden");
+  // --- Handle QA phase ---
+  if (phase === "qa") {
+    if (readyCount === total && isHost) {
+      // Host advances phase to waiting-to-guess
+      gameRef.child("phase").set("waiting-to-guess");
+      return;
+    }
+    if (!window.qaStarted) startQA();
   }
-}
 
+  // --- Handle waiting-to-guess phase ---
+  if (phase === "waiting-to-guess") {
+    showScreen("waiting-room");
+
+    const beginBtn = $("begin-guessing-btn");
+    beginBtn.classList.toggle("hidden", !(isHost && allReady));
+  }
+
+  // --- Update room code and player count ---
   $("room-code-display-game").textContent = code;
   $("players-count").textContent = `Players joined: ${numPlayers} / ${total}`;
 
+  // --- Update players list ---
   const list = $("players-list");
   list.innerHTML = Object.keys(players)
     .map(p => `<li>${p}${players[p].ready ? " ✅" : ""}</li>`)
     .join("");
 
-  // Host-only Begin Game
+  // --- Host-only Begin Game button ---
   $("begin-game-btn").classList.toggle(
     "hidden",
     !(isHost && phase === "waiting" && numPlayers === total)
   );
 
-  // Detect all ready after QA
-  const allReady =
-    numPlayers === total &&
-    Object.values(players).every(p => p.ready === true);
-  
-  // Host advances phase to waiting
-   if (phase === "qa" && allReady && isHost) {
-  gameRef.child("phase").set("waiting-to-guess");
-  return;
- }
-
-  // If everyone is ready, allow host to start guessing
-if (phase === "waiting-to-guess") {
-  $("begin-guessing-btn").classList.toggle(
-    "hidden",
-    !(isHost && allReady)
-  );
-}
-
+  // --- Transition to current phase ---
   transitionToPhase(phase);
-
-  if (phase === "qa" && !window.qaStarted) startQA();
 }
 
 // ---------- Q&A ----------
@@ -355,6 +339,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
