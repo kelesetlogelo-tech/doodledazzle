@@ -243,9 +243,7 @@ function updateRoomUI(data, code) {
 
   // If everyone is ready and phase is still QA
 if (readyCount === total && data.phase === "qa") {
-  if (isHost) 
-  
-}
+  if (isHost)
 
 const waitingCount = total - readyCount;
 
@@ -357,5 +355,6 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
