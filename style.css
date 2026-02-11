@@ -436,14 +436,12 @@ body.waiting-to-guess-phase {
   to { transform: translateX(0); opacity: 1; }
 }
 
+#guessing {
+  display: block !important;
+  color: black !important;
+}
 
-rooms
- └ players
- └ phase
- └ guesses
-      └ targetPlayer
-            └ guessingPlayer
-                  └ answers[]
+
 
 
 
