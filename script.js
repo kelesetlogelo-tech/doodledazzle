@@ -244,15 +244,17 @@ function updateRoomUI(data, code) {
   
 
   // --- Handle QA phase ---
-  if (phase === "qa" && allReady && isHost) {
-      gameRef.child("phase").set("waiting-to-guess");
-      return;
-    }
-  
-    if (!window.qaStarted) startQA();
+ if (phase === "qa") {
+
+  if (allReady && isHost) {
+    gameRef.child("phase").set("waiting-to-guess");
+    return;
   }
 
-  // --- Handle waiting-to-guess phase ---
+  if (!window.qaStarted) startQA();
+}
+
+// --- Handle waiting-to-guess phase ---
   if (phase === "waiting-to-guess") {
     const waitingCount = total - readyCount;
 
@@ -291,7 +293,7 @@ if (phase === "waiting-to-guess") {
 
   // --- Transition to current phase ---
   transitionToPhase(phase);
-
+}
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -349,6 +351,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
