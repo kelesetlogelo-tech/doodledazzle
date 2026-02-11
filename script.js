@@ -345,7 +345,6 @@ async function markReady() {
   
   transitionToPhase("qa");
  }
-}
 
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
@@ -358,3 +357,4 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
