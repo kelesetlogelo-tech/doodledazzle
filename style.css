@@ -380,7 +380,7 @@ body.waiting-to-guess-phase {
 }
 
 #waiting-guess-subheading {
-  margin-top: 5rem; /* 👈 5 lines below banner */
+  margin-top: 3rem; /* 👈 3 lines below banner */
   font-size: 1.4rem;
   font-weight: 700;
   color: #111;
@@ -444,6 +444,7 @@ rooms
       └ targetPlayer
             └ guessingPlayer
                   └ answers[]
+
 
 
 
