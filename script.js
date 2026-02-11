@@ -263,10 +263,8 @@ function updateRoomUI(data, code) {
   if (waitingCount > 0) {
     waitingTextEl.textContent =
       `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`;
-  } else {
-    waitingTextEl.textContent = "Everyone is ready 👀";
-  }
-}
+  } 
+  
   
 if (phase === "waiting-to-guess") {
   $("begin-guessing-btn").classList.toggle(
@@ -351,6 +349,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
