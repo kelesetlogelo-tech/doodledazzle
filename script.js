@@ -255,23 +255,24 @@ function updateRoomUI(data, code) {
 }
 
 // --- Handle waiting-to-guess phase ---
-  if (phase === "waiting-to-guess") {
-    const waitingCount = total - readyCount;
+if (phase === "waiting-to-guess") {
 
-    const waitingTextEl = $("waiting-on-count");
+  const waitingCount = total - readyCount;
+  const waitingTextEl = $("waiting-on-count");
 
   if (waitingCount > 0) {
     waitingTextEl.textContent =
       `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`;
-  } 
-  
-  
-if (phase === "waiting-to-guess") {
+  } else {
+    waitingTextEl.textContent = "👀";
+  }
+
   $("begin-guessing-btn").classList.toggle(
     "hidden",
     !(isHost && allReady)
   );
 }
+
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = code;
@@ -349,11 +350,3 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
-
-
-
-
-
-
-
-
