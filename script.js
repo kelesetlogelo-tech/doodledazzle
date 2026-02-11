@@ -310,16 +310,35 @@ if (phase === "guessing") {
 
   transitionToPhase("guessing");
 }
-
+ 
   if (phase === "guessing") {
+
+    // 1️⃣ Initialize once
+    if (phase === "guessing" && isHost && data.targetOrder === undefined) {
+      const sortedPlayers = Object.keys(players).sort();
+
+      gameRef.update({
+        targetOrder: sortedPlayers,
+        currentTargetIndex: 0
+  });
+
+  return;
+}
 
   const targetOrder = data.targetOrder || [];
   const currentIndex = data.currentTargetIndex || 0;
 
-  if (currentIndex >= targetOrder.length) {
+  // 2️⃣ Only end if order exists
+  if (targetOrder.length > 0 && currentIndex >= targetOrder.length) {
     gameRef.child("phase").set("results");
     return;
   }
+
+  const targetPlayer = targetOrder[currentIndex];
+
+  renderGuessingUI(targetPlayer, data);
+
+  transitionToPhase("guessing");
 }
 
   // --- Update room code and player count ---
@@ -471,5 +490,6 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
