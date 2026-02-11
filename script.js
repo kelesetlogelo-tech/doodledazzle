@@ -395,15 +395,23 @@ async function markReady() {
 
 function renderGuessingUI(targetPlayer, data) {
 
-  const titleEl = $("guess-target-name");
-  titleEl.textContent = targetPlayer;
+  console.log("Rendering UI for:", targetPlayer);
 
-  // If I am the target
-  if (playerId === targetPlayer) {
-    $("guess-container").innerHTML =
-      "<h2>Sit back and enjoy the lies about you 😈</h2>";
+  const titleEl = document.getElementById("guess-target-name");
+  const container = document.getElementById("guess-container");
+
+  console.log("Title element:", titleEl);
+  console.log("Container element:", container);
+
+  if (!titleEl || !container) {
+    console.error("🚨 Guessing HTML elements missing!");
     return;
   }
+
+  titleEl.textContent = "TARGET: " + targetPlayer;
+  container.innerHTML = "<h3>Guessing phase is rendering correctly 🎉</h3>";
+}
+
 
   renderGuessCards(targetPlayer, data);
 }
@@ -477,6 +485,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
