@@ -241,6 +241,21 @@ function updateRoomUI(data, code) {
   const total = data.numPlayers || 0;
   const numPlayers = Object.keys(players).length;
   const phase = data.phase;
+  const readyCount = Object.values(players)
+  .filter(p => p.ready === true).length;
+
+const waitingCount = total - readyCount;
+
+if (phase === "waiting-to-guess") {
+  const waitingTextEl = $("waiting-on-count");
+
+  if (waitingCount > 0) {
+    waitingTextEl.textContent =
+      `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`;
+  } else {
+    waitingTextEl.textContent = "Everyone is ready 👀";
+  }
+}
 
   $("room-code-display-game").textContent = code;
   $("players-count").textContent = `Players joined: ${numPlayers} / ${total}`;
@@ -330,6 +345,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
