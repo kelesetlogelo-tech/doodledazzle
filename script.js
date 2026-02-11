@@ -344,8 +344,6 @@ if (phase === "guessing-intro") {
     !(isHost && phase === "waiting" && numPlayers === total)
   );
 
-  // --- Transition to current phase ---
-  transitionToPhase(phase);
 }
 // ---------- Q&A ----------
 function startQA() {
@@ -458,7 +456,7 @@ function checkIfAllGuessesComplete(targetPlayer) {
     const guesses = snap.val() || {};
     const guessers = Object.keys(guesses);
 
-    const totalPlayers = Object.keys(currentPlayers).length;
+    const totalPlayers = Object.keys(players).length;
 
     if (guessers.length === totalPlayers - 1) {
 
@@ -481,6 +479,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
