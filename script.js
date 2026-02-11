@@ -98,9 +98,6 @@ async function handleAllQuestionsAnswered() {
   if (gameRef && playerId) {
     await gameRef.child(`players/${playerId}/ready`).set(true);
   }
-
-  // Transition THIS player immediately
-  transitionToPhase("waiting-to-guess");
 }
 
 /*************************************************
@@ -244,16 +241,28 @@ function updateRoomUI(data, code) {
   const readyCount = Object.values(players)
   .filter(p => p.ready === true).length;
 
+  // If everyone is ready and phase is still QA
+if (readyCount === total && data.phase === "qa") {
+  if (isHost) {
+    // Host advances phase to waiting
+    await update(ref(db, `rooms/${code}`), {
+      phase: "waiting-to-guess"
+    });
+  }
+}
+
 const waitingCount = total - readyCount;
 
 if (phase === "waiting-to-guess") {
-  const waitingTextEl = $("waiting-on-count");
 
-  if (waitingCount > 0) {
-    waitingTextEl.textContent =
-      `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`;
+  showScreen("waiting-room");
+
+  const beginBtn = $("begin-guessing-btn");
+
+  if (isHost && readyCount === total) {
+    beginBtn.classList.remove("hidden");
   } else {
-    waitingTextEl.textContent = "Everyone is ready 👀";
+    beginBtn.classList.add("hidden");
   }
 }
 
@@ -275,6 +284,12 @@ if (phase === "waiting-to-guess") {
   const allReady =
     numPlayers === total &&
     Object.values(players).every(p => p.ready === true);
+
+  // Host moves game from QA → Waiting to Guess
+if (phase === "qa" && allReady && isHost) {
+  gameRef.child("phase").set("waiting-to-guess");
+  return; // stop further execution to avoid flicker
+}
 
   // If everyone is ready, allow host to start guessing
 if (phase === "waiting-to-guess") {
@@ -331,7 +346,10 @@ function renderQuestion() {
 
 async function markReady() {
   await gameRef.child(`players/${playerId}/ready`).set(true);
-  transitionToPhase("pre-guess");
+  
+  transitionToPhase("qa");
+});
+
 }
 
 // ---------- Copy Room Code ----------
@@ -345,6 +363,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
