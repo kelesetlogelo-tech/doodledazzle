@@ -10,6 +10,7 @@ const $ = id => document.getElementById(id);
 let gameRef = null;
 let playerId = null;
 let isHost = false;
+let roomCode = null;
 let currentQuestion = 0;
 let answers = {};
 window.qaStarted = false;
@@ -182,6 +183,7 @@ async function createRoom() {
   playerId = name;
   isHost = true;
 
+  roomCode = code;
   gameRef = window.db.ref("rooms/" + code);
   await gameRef.set({
     host: name,
@@ -208,6 +210,7 @@ async function joinRoom() {
   playerId = name;
   isHost = false;
 
+  roomCode = code;
   gameRef = window.db.ref("rooms/" + code);
   const snap = await gameRef.once("value");
   if (!snap.exists()) return alert("Room not found");
@@ -356,7 +359,7 @@ function updateRoomUI(data, code) {
 }
 
   // --- Update room code and player count ---
-  $("room-code-display-game").textContent = code;
+  $("room-code-display-game").textContent = roomCode;
   $("players-count").textContent = `Players joined: ${numPlayers} / ${total}`;
 
   // --- Update players list ---
@@ -505,6 +508,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
