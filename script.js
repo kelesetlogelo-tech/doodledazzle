@@ -253,7 +253,7 @@ function updateRoomUI(data, code) {
     transitionToPhase("waiting");
 
     $("room-code-display-game").textContent = code;
-    $("players-count").textContent = `Players joined: ${numPlayers} / ${total}`;
+  
 
     $("players-list").innerHTML = Object.keys(players)
       .map(p => `<li>${p}${players[p].ready ? " ✅" : ""}</li>`)
@@ -360,7 +360,7 @@ function updateRoomUI(data, code) {
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = roomCode;
-  $("players-count").textContent = `Players joined: ${numPlayers} / ${total}`;
+
 
   // --- Update players list ---
   const list = $("players-list");
@@ -508,6 +508,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
