@@ -371,7 +371,6 @@ function updateRoomUI(data, code) {
     !(isHost && phase === "waiting" && numPlayers === total)
   );
 
-}
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -506,6 +505,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
