@@ -232,101 +232,128 @@ function subscribeToGame(code) {
   });
 }
 
-// ---------- Update UI ----------
+//UPDATE ROOM UI
 function updateRoomUI(data, code) {
+
   const players = data.players || {};
   const total = data.numPlayers || 0;
   const numPlayers = Object.keys(players).length;
   const phase = data.phase;
   const readyCount = Object.values(players).filter(p => p.ready).length;
-  const allReady = numPlayers === total && Object.values(players).every(p => p.ready === true);
+  const allReady = numPlayers === total && Object.values(players).every(p => p.ready);
 
-  console.log("Entering guessing phase UI");
+  // ------------------------
+  // WAITING
+  // ------------------------
+  if (phase === "waiting") {
 
+    transitionToPhase("waiting");
 
-  // --- Handle QA phase ---
- if (phase === "qa") {
+    $("room-code-display-game").textContent = code;
+    $("players-count").textContent = `Players joined: ${numPlayers} / ${total}`;
 
-  if (allReady && isHost) {
-    gameRef.child("phase").set("waiting-to-guess");
-    return;
-  }
+    $("players-list").innerHTML = Object.keys(players)
+      .map(p => `<li>${p}${players[p].ready ? " ✅" : ""}</li>`)
+      .join("");
 
-  if (!window.qaStarted) startQA();
-}
-
-// --- Handle waiting-to-guess phase ---
-if (phase === "waiting-to-guess") {
-
-  const waitingCount = total - readyCount;
-  const waitingTextEl = $("waiting-on-count");
-
-  if (waitingCount > 0) {
-    waitingTextEl.textContent =
-      `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`;
-  } else {
-    waitingTextEl.textContent = "👀";
-  }
-
-  $("begin-guessing-btn").classList.toggle(
-    "hidden",
-    !(isHost && allReady)
-  );
-}
-
-  // --- Guessing Intro Phase ---
-if (phase === "guessing-intro") {
-
-  transitionToPhase("guessing-intro");
-
-  if (isHost) {
-    setTimeout(() => {
-      gameRef.child("phase").set("guessing");
-    }, 7000); // 7 seconds
-  }
-
-  return;
-}
-
- if (phase === "guessing") {
-
-  transitionToPhase("guessing");
-
-  // 🔥 Initialize once
-  if (isHost && !data.targetOrder) {
-
-    const sortedPlayers = Object.keys(players).sort();
-
-    console.log("Initializing target order:", sortedPlayers);
-
-    gameRef.update({
-      targetOrder: sortedPlayers,
-      currentTargetIndex: 0
-    });
+    $("begin-game-btn").classList.toggle(
+      "hidden",
+      !(isHost && numPlayers === total)
+    );
 
     return;
   }
 
-  const targetOrder = data.targetOrder;
-  const currentIndex = data.currentTargetIndex;
+  // ------------------------
+  // QA
+  // ------------------------
+  if (phase === "qa") {
 
-  if (!targetOrder || currentIndex === undefined) {
-    console.log("Waiting for guessing setup...");
+    transitionToPhase("qa");
+
+    if (allReady && isHost) {
+      gameRef.child("phase").set("waiting-to-guess");
+      return;
+    }
+
+    if (!window.qaStarted) startQA();
     return;
   }
 
-  if (currentIndex >= targetOrder.length) {
-    gameRef.child("phase").set("results");
+  // ------------------------
+  // WAITING TO GUESS
+  // ------------------------
+  if (phase === "waiting-to-guess") {
+
+    transitionToPhase("waiting-to-guess");
+
+    const waitingCount = total - readyCount;
+
+    $("waiting-on-count").textContent =
+      waitingCount > 0
+        ? `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`
+        : "👀";
+
+    $("begin-guessing-btn").classList.toggle(
+      "hidden",
+      !(isHost && allReady)
+    );
+
     return;
   }
 
-  const targetPlayer = targetOrder[currentIndex];
+  // ------------------------
+  // GUESSING INTRO
+  // ------------------------
+  if (phase === "guessing-intro") {
 
-  console.log("Current target:", targetPlayer);
+    transitionToPhase("guessing-intro");
 
-  renderGuessingUI(targetPlayer, data);
+    if (isHost) {
+      setTimeout(() => {
+        gameRef.child("phase").set("guessing");
+      }, 7000);
+    }
+
+    return;
+  }
+
+  // ------------------------
+  // GUESSING
+  // ------------------------
+  if (phase === "guessing") {
+
+    transitionToPhase("guessing");
+
+    if (isHost && !data.targetOrder) {
+
+      const sortedPlayers = Object.keys(players).sort();
+
+      gameRef.update({
+        targetOrder: sortedPlayers,
+        currentTargetIndex: 0
+      });
+
+      return;
+    }
+
+    const targetOrder = data.targetOrder;
+    const currentIndex = data.currentTargetIndex;
+
+    if (!targetOrder || currentIndex === undefined) return;
+
+    if (currentIndex >= targetOrder.length) {
+      gameRef.child("phase").set("results");
+      return;
+    }
+
+    const targetPlayer = targetOrder[currentIndex];
+    renderGuessingUI(targetPlayer, data);
+
+    return;
+  }
+
 }
-
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = code;
@@ -479,6 +506,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
