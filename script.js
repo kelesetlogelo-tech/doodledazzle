@@ -291,7 +291,6 @@ if (phase === "waiting-to-guess") {
 
   // --- Transition to current phase ---
   transitionToPhase(phase);
-}
 
 // ---------- Q&A ----------
 function startQA() {
@@ -350,6 +349,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
