@@ -245,10 +245,10 @@ function updateRoomUI(data, code) {
 if (readyCount === total && data.phase === "qa") {
   if (isHost) {
     // Host advances phase to waiting
-    await update(ref(db, `rooms/${code}`), {
-      phase: "waiting-to-guess"
-    });
-  }
+   if (phase === "qa" && allReady && isHost) {
+  gameRef.child("phase").set("waiting-to-guess");
+  return;
+ }
 }
 
 const waitingCount = total - readyCount;
@@ -285,10 +285,6 @@ if (phase === "waiting-to-guess") {
     numPlayers === total &&
     Object.values(players).every(p => p.ready === true);
 
-  // Host moves game from QA → Waiting to Guess
-if (phase === "qa" && allReady && isHost) {
-  gameRef.child("phase").set("waiting-to-guess");
-  return; // stop further execution to avoid flicker
 }
 
   // If everyone is ready, allow host to start guessing
@@ -363,6 +359,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
