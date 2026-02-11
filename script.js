@@ -344,8 +344,7 @@ async function markReady() {
   await gameRef.child(`players/${playerId}/ready`).set(true);
   
   transitionToPhase("qa");
-});
-
+ }
 }
 
 // ---------- Copy Room Code ----------
@@ -359,14 +358,3 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
-
-
-
-
-
-
-
-
-
-
-
