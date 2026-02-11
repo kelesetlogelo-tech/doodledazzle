@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("begin-guessing-btn")?.addEventListener("click", () => {
     if (isHost && gameRef) {
-      gameRef.child("phase").set("guessing");
+      gameRef.child("phase").set("guessing-intro");
     }
   });
 
@@ -273,6 +273,53 @@ if (phase === "waiting-to-guess") {
   );
 }
 
+  // --- Guessing Intro Phase ---
+if (phase === "guessing-intro") {
+
+  transitionToPhase("guessing-intro");
+
+  if (isHost) {
+    setTimeout(() => {
+      gameRef.child("phase").set("guessing");
+    }, 7000); // 7 seconds
+  }
+
+  return;
+}
+
+  if (phase === "guessing" && isHost && !data.currentTargetIndex) {
+
+  const sortedPlayers = Object.keys(players).sort();
+
+  gameRef.update({
+    currentTargetIndex: 0,
+    targetOrder: sortedPlayers
+  });
+
+  return;
+}
+
+if (phase === "guessing") {
+
+  const targetOrder = data.targetOrder || [];
+  const currentIndex = data.currentTargetIndex || 0;
+  const targetPlayer = targetOrder[currentIndex];
+
+  renderGuessingUI(targetPlayer, data);
+
+  transitionToPhase("guessing");
+}
+
+  if (phase === "guessing") {
+
+  const targetOrder = data.targetOrder || [];
+  const currentIndex = data.currentTargetIndex || 0;
+
+  if (currentIndex >= targetOrder.length) {
+    gameRef.child("phase").set("results");
+    return;
+  }
+}
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = code;
@@ -339,6 +386,79 @@ async function markReady() {
   transitionToPhase("qa");
  }
 
+function renderGuessingUI(targetPlayer, data) {
+
+  const titleEl = $("guess-target-name");
+  titleEl.textContent = targetPlayer;
+
+  // If I am the target
+  if (playerId === targetPlayer) {
+    $("guess-container").innerHTML =
+      "<h2>Sit back and enjoy the lies about you 😈</h2>";
+    return;
+  }
+
+  renderGuessCards(targetPlayer, data);
+}
+
+function renderGuessCards(targetPlayer, data) {
+
+  const container = $("guess-container");
+  container.innerHTML = "";
+
+  questions.forEach((q, index) => {
+
+    const card = document.createElement("div");
+    card.className = "guess-card";
+
+    const question = document.createElement("h3");
+    question.textContent = q.text;
+
+    card.appendChild(question);
+
+    q.options.forEach(option => {
+      const btn = document.createElement("button");
+      btn.textContent = option;
+
+      btn.addEventListener("click", () => {
+        saveGuess(targetPlayer, index, option);
+      });
+
+      card.appendChild(btn);
+    });
+
+    container.appendChild(card);
+  });
+}
+
+function saveGuess(targetPlayer, questionIndex, answer) {
+
+  gameRef
+    .child(`guesses/${targetPlayer}/${playerId}/${questionIndex}`)
+    .set(answer);
+
+  checkIfAllGuessesComplete(targetPlayer);
+}
+
+function checkIfAllGuessesComplete(targetPlayer) {
+
+  gameRef.child("guesses/" + targetPlayer).once("value", snap => {
+
+    const guesses = snap.val() || {};
+    const guessers = Object.keys(guesses);
+
+    const totalPlayers = Object.keys(currentPlayers).length;
+
+    if (guessers.length === totalPlayers - 1) {
+
+      if (isHost) {
+        gameRef.child("currentTargetIndex").transaction(i => i + 1);
+      }
+    }
+  });
+}
+
+
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
   if (e.target.id === "room-code-display-game") {
@@ -350,3 +470,4 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
