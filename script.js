@@ -288,58 +288,45 @@ if (phase === "guessing-intro") {
   return;
 }
 
-  if (phase === "guessing" && isHost && !data.currentTargetIndex) {
-
-  const sortedPlayers = Object.keys(players).sort();
-
-  gameRef.update({
-    currentTargetIndex: 0,
-    targetOrder: sortedPlayers
-  });
-
-  return;
-}
-
-if (phase === "guessing") {
-
-  const targetOrder = data.targetOrder || [];
-  const currentIndex = data.currentTargetIndex || 0;
-  const targetPlayer = targetOrder[currentIndex];
-
-  renderGuessingUI(targetPlayer, data);
+ if (phase === "guessing") {
 
   transitionToPhase("guessing");
-}
- 
-  if (phase === "guessing") {
 
-    // 1️⃣ Initialize once
-    if (phase === "guessing" && isHost && data.targetOrder === undefined) {
-      const sortedPlayers = Object.keys(players).sort();
+  // 🔥 Initialize once
+  if (isHost && !data.targetOrder) {
 
-      gameRef.update({
-        targetOrder: sortedPlayers,
-        currentTargetIndex: 0
-  });
+    const sortedPlayers = Object.keys(players).sort();
 
-  return;
-}
+    console.log("Initializing target order:", sortedPlayers);
 
-  const targetOrder = data.targetOrder || [];
-  const currentIndex = data.currentTargetIndex || 0;
+    gameRef.update({
+      targetOrder: sortedPlayers,
+      currentTargetIndex: 0
+    });
 
-  // 2️⃣ Only end if order exists
-  if (targetOrder.length > 0 && currentIndex >= targetOrder.length) {
+    return;
+  }
+
+  const targetOrder = data.targetOrder;
+  const currentIndex = data.currentTargetIndex;
+
+  if (!targetOrder || currentIndex === undefined) {
+    console.log("Waiting for guessing setup...");
+    return;
+  }
+
+  if (currentIndex >= targetOrder.length) {
     gameRef.child("phase").set("results");
     return;
   }
 
   const targetPlayer = targetOrder[currentIndex];
 
-  renderGuessingUI(targetPlayer, data);
+  console.log("Current target:", targetPlayer);
 
-  transitionToPhase("guessing");
+  renderGuessingUI(targetPlayer, data);
 }
+
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = code;
@@ -490,6 +477,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
