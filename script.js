@@ -241,7 +241,8 @@ function updateRoomUI(data, code) {
   const readyCount = Object.values(players).filter(p => p.ready).length;
   const allReady = numPlayers === total && Object.values(players).every(p => p.ready === true);
 
-  
+  console.log("Current phase:", phase);
+
 
   // --- Handle QA phase ---
  if (phase === "qa") {
@@ -470,4 +471,5 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
