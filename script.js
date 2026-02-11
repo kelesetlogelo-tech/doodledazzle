@@ -405,8 +405,6 @@ async function markReady() {
   
   transitionToPhase("qa");
  }
-console.log("targetOrder:", data.targetOrder);
-console.log("currentTargetIndex:", data.currentTargetIndex);
 
 function renderGuessingUI(targetPlayer, data) {
 
@@ -492,6 +490,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
