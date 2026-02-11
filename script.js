@@ -412,8 +412,6 @@ function renderGuessingUI(targetPlayer, data) {
   container.innerHTML = "<h3>Guessing phase is rendering correctly 🎉</h3>";
 }
 
-  renderGuessCards(targetPlayer, data);
-
 function renderGuessCards(targetPlayer, data) {
 
   const container = $("guess-container");
@@ -483,6 +481,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
