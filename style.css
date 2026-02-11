@@ -417,6 +417,33 @@ body.waiting-to-guess-phase {
   color: #1e3a8a;
 }
 
+.guessing-intro-phase,
+.guessing-phase {
+  background-color: #cfe8ff; /* pastel blue */
+}
+
+.guess-card {
+  background: white;
+  padding: 20px;
+  margin: 20px auto;
+  width: 80%;
+  border-radius: 20px;
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+
+rooms
+ └ players
+ └ phase
+ └ guesses
+      └ targetPlayer
+            └ guessingPlayer
+                  └ answers[]
 
 
 
