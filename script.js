@@ -296,12 +296,6 @@ function updateRoomUI(data, code) {
       waitingCount > 0
         ? `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`
         : "👀";
-
-    $("begin-guessing-btn").classList.toggle(
-      "hidden",
-      !(isHost && allReady)
-    );
-
     return;
   }
 
@@ -360,13 +354,6 @@ function updateRoomUI(data, code) {
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = roomCode;
-
-
-  // --- Update players list ---
-  const list = $("players-list");
-  list.innerHTML = Object.keys(players)
-    .map(p => `<li>${p}${players[p].ready ? " ✅" : ""}</li>`)
-    .join("");
 
   // --- Host-only Begin Game button ---
   $("begin-game-btn").classList.toggle(
@@ -508,6 +495,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
