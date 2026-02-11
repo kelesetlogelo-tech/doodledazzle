@@ -100,15 +100,7 @@
     
   </div>
 
-  <!-- 🔮 GUESSING PHASE -->
-  <section id="guessingPhase" class="page hidden">
-    <div class="container">
-    <h2>Guessing Phase 🔮</h2>
-    <p class="scene-tagline">“Now’s your chance to expose how well you really know them.”</p>
-    <div id="guessing-content"></div>
-    </div>
-  </section>
-
+  <!-- Guessing Intro Screen -->
 <div id="guessing-intro" class="page hidden">
   <h1 class="banner">
     Friendship Test: Prepare to Fail Spectacularly!
@@ -118,6 +110,13 @@
     Now's your chance to expose how well you really know them
   </p>
 </div>
+
+<!-- Guessing Screen -->
+<div id="guessing" class="page hidden">
+  <h2 id="guess-target-name"></h2>
+  <div id="guess-container"></div>
+</div>
+
  
   <!-- 🏆 SCOREBOARD -->
   <section id="scoreboardPhase" class="page hidden">
@@ -147,6 +146,7 @@
   <script defer src="script.js"></script>
 </body>
 </html>
+
 
 
 
