@@ -170,6 +170,17 @@ function updateBackgroundForPhase(phase) {
   document.body.classList.add(`${phase}-phase`);
 }
 
+function transitionToPhase(phaseId) {
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  const activeScreen = document.getElementById(phaseId);
+  if (activeScreen) {
+    activeScreen.classList.add("active");
+  }
+}
+
 // ---------- Create Room ----------
 async function createRoom() {
   const name = $("hostName").value.trim();
@@ -526,6 +537,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
