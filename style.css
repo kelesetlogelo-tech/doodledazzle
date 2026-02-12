@@ -444,29 +444,34 @@ body.waiting-to-guess-phase {
   display: none;
 }
 
-/* ========================= */
-/* Guessing Intro Styling */
-/* ========================= */
+/* Guessing Intro screen styling */
 #guessing-intro {
-  background-color: yellow;
-  color: black; /* FORCE BLACK TEXT */
+  background: #cfe8ff;        /* pastel blue */
+  color: #111;                /* force black text */
 }
 
-#guessing-intro h1 {
-  font-size: 42px;
-  margin-bottom: 20px;
-  color: black;
+#guessing-intro .banner {
+  background: rgba(255,255,255,0.75);
+  color: #111;
+  padding: 14px 18px;
+  border-radius: 16px;
+  font-weight: 800;
+  margin: 0 auto 18px auto;
+  max-width: 900px;
 }
 
-#guessing-intro p {
-  font-size: 20px;
-  color: black;
+#guessing-intro .tagline {
+  color: #111;
+  margin-top: 24px;          /* ~ “5 lines” gap feel */
+  font-size: 1.05rem;
+  font-weight: 600;
 }
 
-.intro-content {
-  max-width: 600px;
+#guessing-intro .info {
+  color: #111;
+  margin-top: 18px;
+  font-weight: 700;
 }
-
 
 
 
