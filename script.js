@@ -329,6 +329,12 @@ if (phase === "waiting") {
 // ------------------------
 if (phase === "guessing-intro") {
   transitionToPhase("guessing-intro"); // ✅ show ONLY intro screen
+  // ✅ Force intro text (prevents blank screen even if HTML got edited)
+const banner = $("guess-intro-banner");
+const tagline = $("guess-intro-tagline");
+if (banner) banner.textContent = "Friendship Test: Prepare to Fail Spectacularly!";
+if (tagline) tagline.textContent = "Now's your chance to expose how well you really know them.";
+
 
   // ✅ countdown text (visible for everyone)
   const countdownEl = $("guess-intro-countdown");
@@ -526,6 +532,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
