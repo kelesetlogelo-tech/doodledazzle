@@ -249,9 +249,9 @@ console.log("Current phase:", data.phase);
   // ------------------------
   // WAITING
   // ------------------------
-  if (phase === "waiting") {
+  if (phase === "waiting-to-guess") {
 
-    transitionToPhase("waiting");
+    transitionToPhase("waiting-to-guess");
 
     $("room-code-display-game").textContent = code;
   
@@ -260,7 +260,7 @@ console.log("Current phase:", data.phase);
       .map(p => `<li>${p}${players[p].ready ? " ✅" : ""}</li>`)
       .join("");
 
-    $("begin-game-btn").classList.toggle(
+    $("begin-guessing-btn").classList.toggle(
       "hidden",
       !(isHost && numPlayers === total)
     );
@@ -522,6 +522,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
