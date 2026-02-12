@@ -326,21 +326,31 @@ if (phase === "waiting") {
   return;
 }
 
-  // ------------------------
-  // GUESSING INTRO
-  // ------------------------
-  if (phase === "guessing-intro") {
+// ------------------------
+// GUESSING INTRO
+// ------------------------
+if (phase === "guessing-intro") {
 
-    transitionToPhase("guessing-intro");
+  console.log("Entering guessing intro UI");
 
-    if (isHost) {
-      setTimeout(() => {
-        gameRef.child("phase").set("guessing");
-      }, 7000);
-    }
+  transitionToPhase("guessing-intro");
 
-    return;
+  // Set intro text
+  $("guessing-intro-title").textContent = "Friendship Test: Prepare to Fail Spectacularly!";
+  $("guessing-intro-subtext").textContent =
+    "Time to expose how well you really know your tribe.";
+
+  // Force black text (just in case theme overrides)
+  $("guessing-intro-screen").style.color = "black";
+
+  if (isHost) {
+    setTimeout(() => {
+      gameRef.child("phase").set("guessing");
+    }, 7000);
   }
+
+  return;
+}
 
   // ------------------------
   // GUESSING
@@ -522,6 +532,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
