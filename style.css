@@ -219,6 +219,10 @@ body.qaPhase-phase {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
 }
 
+body.guessing-intro {
+  background: linear-gradient(135deg, #ff6a00, #ee0979);
+}
+
 body.guessingPhase-phase {
   background: linear-gradient(135deg, #f7971e, #ffd200);
 }
@@ -461,6 +465,7 @@ body.waiting-to-guess-phase {
 .intro-content {
   max-width: 600px;
 }
+
 
 
 
