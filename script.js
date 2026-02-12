@@ -339,7 +339,7 @@ if (phase === "guessing-intro") {
 
     setTimeout(() => {
       introTimerStarted = false;
-      gameRef.child("phase").set("guessing");
+      gameRef.child("phase").set("guessing-intro");
     }, 7000);
   }
 
@@ -526,6 +526,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
