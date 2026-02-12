@@ -293,23 +293,40 @@ function updateRoomUI(data, code) {
   // ------------------------
   // WAITING TO GUESS
   // ------------------------
-  if (phase === "waiting-to-guess") {
+  // ------------------------
+// WAITING (Lobby)
+// ------------------------
+if (phase === "waiting") {
 
-    transitionToPhase("waiting-to-guess");
+  transitionToPhase("waiting");
 
-    const waitingCount = total - readyCount;
+  // Update room code
+  $("room-code-display-game").textContent = code;
 
-    $("waiting-on-count").textContent =
-      waitingCount > 0
-        ? `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`
-        : "👀";
-    return;
-  
-   console.log("isHost:", isHost);
-   console.log("readyCount:", readyCount);
-   console.log("total:", total);
-   console.log("allReady:", allReady);
+  // Update player count correctly
+  const playersNeeded = total - numPlayers;
+
+  if (playersNeeded > 0) {
+    $("players-count").textContent =
+      `Waiting on ${playersNeeded} player${playersNeeded > 1 ? "s" : ""}...`;
+  } else {
+    $("players-count").textContent =
+      `All ${total} players joined ✅`;
   }
+
+  // Update player list
+  $("players-list").innerHTML = Object.keys(players)
+    .map(p => `<li>${p}</li>`)
+    .join("");
+
+  // Show Begin Game only when full
+  $("begin-game-btn").classList.toggle(
+    "hidden",
+    !(isHost && numPlayers === total)
+  );
+
+  return;
+}
 
   // ------------------------
   // GUESSING INTRO
@@ -507,6 +524,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
