@@ -272,17 +272,16 @@ function updateRoomUI(data, code) {
   // ------------------------
   if (phase === "qa") {
 
+    console.log("QA phase check:");
+    console.log("isHost:", isHost);
+    console.log("readyCount:", readyCount);
+    console.log("total:", total);
+    console.log("allReady:", allReady);
+
     transitionToPhase("qa");
 
    if (allReady && isHost) {
-
-  const updates = { phase: "waiting-to-guess" };
-
-  Object.keys(players).forEach(p => {
-    updates[`players/${p}/ready`] = false;
-  });
-
-  gameRef.update(updates);
+  gameRef.child("phase").set("waiting-to-guess");
   return;
 }
 
@@ -524,6 +523,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
