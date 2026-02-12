@@ -139,6 +139,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+   console.log("Current phase:", data.phase);
+
   $("begin-guessing-btn")?.addEventListener("click", () => {
     if (isHost && gameRef) {
       gameRef.child("phase").set("guessing-intro");
@@ -521,6 +523,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
