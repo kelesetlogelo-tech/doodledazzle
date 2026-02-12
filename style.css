@@ -31,7 +31,8 @@ html, body {
 
 /* Script removes .hidden to show a section */
 .page:not(.hidden) {
-  display: flex;      /* restores flex layout */
+  display: flex; 
+  flex direction: column; /* restores flex layout */
   opacity: 1;
   transform: translateY(0);
 }
@@ -465,6 +466,7 @@ body.waiting-to-guess-phase {
 .intro-content {
   max-width: 600px;
 }
+
 
 
 
