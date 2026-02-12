@@ -140,11 +140,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  $("begin-guessing-btn")?.addEventListener("click", () => {
-    if (isHost && gameRef) {
-      gameRef.child("phase").set("guessing-intro");
-    }
-  });
+ $("begin-guessing-btn")?.addEventListener("click", () => {
+  if (!isHost || !gameRef) return;
+  gameRef.child("phase").set("guessing-intro");
+});
 
   $("submit-answers-btn")?.addEventListener("click", async () => {
   if (!gameRef || !playerId) return;
@@ -329,19 +328,28 @@ if (phase === "waiting") {
 // GUESSING INTRO
 // ------------------------
 if (phase === "guessing-intro") {
+  transitionToPhase("guessing-intro"); // ✅ show ONLY intro screen
 
-  transitionToPhase("guessing-intro");
-
-  if (isHost && !introTimerStarted) {
-    introTimerStarted = true;
-
-    setTimeout(() => {
-      introTimerStarted = false;
-      gameRef.child("phase").set("guessing-intro");
-    }, 7000);
+  // ✅ countdown text (visible for everyone)
+  const countdownEl = $("guess-intro-countdown");
+  if (countdownEl) {
+    let secs = 10;
+    countdownEl.textContent = secs;
+    const t = setInterval(() => {
+      secs--;
+      countdownEl.textContent = secs;
+      if (secs <= 0) clearInterval(t);
+    }, 1000);
   }
 
-  return;
+  // ✅ only host advances to guessing after 10s
+  if (isHost) {
+    setTimeout(() => {
+      gameRef.child("phase").set("guessing");
+    }, 10000);
+  }
+
+  return; // ✅ CRITICAL: stop the function so it doesn't render waiting screen too
 }
 
   // ------------------------
@@ -518,6 +526,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
