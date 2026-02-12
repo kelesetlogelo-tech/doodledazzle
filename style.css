@@ -220,7 +220,7 @@ body.qaPhase-phase {
 }
 
 body.guessing-intro {
-  background: linear-gradient(135deg, #ff6a00, #ee0979);
+  background: rgba(255,255,0,0.75);
 }
 
 body.guessingPhase-phase {
@@ -447,7 +447,7 @@ body.waiting-to-guess-phase {
 /* Guessing Intro Styling */
 /* ========================= */
 #guessing-intro {
-  background-color: white;
+  background-color: yellow;
   color: black; /* FORCE BLACK TEXT */
 }
 
@@ -465,6 +465,7 @@ body.waiting-to-guess-phase {
 .intro-content {
   max-width: 600px;
 }
+
 
 
 
