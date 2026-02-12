@@ -338,10 +338,10 @@ if (phase === "guessing-intro") {
   // Set intro text
   $("guessing-intro-title").textContent = "Friendship Test: Prepare to Fail Spectacularly!";
   $("guessing-intro-subtext").textContent =
-    "Time to expose how well you really know your tribe.";
+    "Now's your chance to expose how well you really know them.";
 
   // Force black text (just in case theme overrides)
-  $("guessing-intro-screen").style.color = "black";
+  $("guessing-intro").style.color = "black";
 
   if (isHost) {
     setTimeout(() => {
@@ -532,6 +532,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
