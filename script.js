@@ -13,6 +13,7 @@ let isHost = false;
 let roomCode = null;
 let currentQuestion = 0;
 let answers = {};
+let introTimerStarted = false;
 window.qaStarted = false;
 
 /*************************************************
@@ -331,20 +332,13 @@ if (phase === "waiting") {
 // ------------------------
 if (phase === "guessing-intro") {
 
-  console.log("Entering guessing intro UI");
-
   transitionToPhase("guessing-intro");
 
-  // Set intro text
-  $("guessing-intro-title").textContent = "Friendship Test: Prepare to Fail Spectacularly!";
-  $("guessing-intro-subtext").textContent =
-    "Now's your chance to expose how well you really know them.";
+  if (isHost && !introTimerStarted) {
+    introTimerStarted = true;
 
-  // Force black text (just in case theme overrides)
-  $("guessing-intro").style.color = "black";
-
-  if (isHost) {
     setTimeout(() => {
+      introTimerStarted = false;
       gameRef.child("phase").set("guessing");
     }, 7000);
   }
@@ -532,6 +526,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
