@@ -417,7 +417,7 @@ body.waiting-to-guess-phase {
   color: #1e3a8a;
 }
 
-#guessing-intro-screen {
+.guessing-intro-screen {
   background: #cfe8ff; /* pastel blue */
   color: black;
 }
@@ -443,6 +443,7 @@ body.waiting-to-guess-phase {
 .page.active {
   display: block;
 }
+
 
 
 
