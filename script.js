@@ -244,8 +244,6 @@ function subscribeToGame(code) {
 
 //UPDATE ROOM UI
 function updateRoomUI(data, code) {
-console.log("Current phase:", data.phase);
-
   const players = data.players || {};
   const total = data.numPlayers || 0;
   const numPlayers = Object.keys(players).length;
@@ -532,6 +530,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
