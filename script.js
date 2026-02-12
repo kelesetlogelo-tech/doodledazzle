@@ -268,30 +268,28 @@ function updateRoomUI(data, code) {
   }
 
   // ------------------------
-  // QA
-  // ------------------------
-  if (phase === "qa") {
+// QA
+// ------------------------
+if (phase === "qa") {
 
-    console.log("QA phase check:");
-    console.log("isHost:", isHost);
-    console.log("readyCount:", readyCount);
-    console.log("total:", total);
-    console.log("allReady:", allReady);
+  transitionToPhase("qa");
 
-    transitionToPhase("qa");
+  const readyCount = Object.values(players).filter(p => p.ready).length;
+  const allReady = readyCount === total;
 
-   if (allReady && isHost) {
-  gameRef.child("phase").set("waiting-to-guess");
-  return;
-}
+  console.log("QA check → ready:", readyCount, "/", total);
 
-    if (!window.qaStarted) startQA();
+  if (allReady && isHost) {
+    console.log("All players done. Moving to waiting-to-guess.");
+    gameRef.child("phase").set("waiting-to-guess");
     return;
   }
 
-  // ------------------------
-  // WAITING TO GUESS
-  // ------------------------
+  if (!window.qaStarted) startQA();
+
+  return;
+}
+
   // ------------------------
 // WAITING (Lobby)
 // ------------------------
@@ -523,6 +521,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
