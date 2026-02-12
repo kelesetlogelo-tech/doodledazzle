@@ -155,11 +155,47 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ---------- Page Switching ----------
 function transitionToPhase(phase) {
-  document.querySelectorAll(".page").forEach(p => p.classList.add("hidden"));
-  const el = $(phase);
-  if (el) el.classList.remove("hidden");
+  console.log("🌈 transitionToPhase:", phase);
+
+  // 1) Hide all pages
+  document.querySelectorAll("section.page").forEach(s => s.classList.add("hidden"));
+
+  // 2) Try multiple possible IDs for the same phase
+  const candidates = [
+    phase,                              // guessing-intro
+    phase.replace(/-/g, ""),            // guessingintro
+    phase.replace(/-/g, "_"),           // guessing_intro
+    phase.replace(/-/g, "") + "Phase",  // guessingintroPhase
+    phase + "Phase",                    // guessing-introPhase
+    phase.replace(/-/g, "") + "-phase", // guessingintro-phase
+  ];
+
+  let target = null;
+  for (const id of candidates) {
+    const el = document.getElementById(id);
+    if (el) {
+      target = el;
+      break;
+    }
+  }
+
+  // 3) If we still didn't find it, show a loud error and fall back to lobby
+  if (!target) {
+    console.error("❌ transitionToPhase failed. No section found for:", phase, "Tried:", candidates);
+
+    // fallback so you never get a blank screen
+    const fallback = document.getElementById("waiting") || document.getElementById("createJoin");
+    if (fallback) fallback.classList.remove("hidden");
+    return;
+  }
+
+  // 4) Show the correct section
+  target.classList.remove("hidden");
+
+  // 5) Update background
   updateBackgroundForPhase(phase);
 }
+
 
 function updateBackgroundForPhase(phase) {
   document.body.className = document.body.className
@@ -532,6 +568,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
