@@ -170,12 +170,6 @@ function updateBackgroundForPhase(phase) {
   document.body.classList.add(`${phase}-phase`);
 }
 
-function transitionToPhase(phaseId) {
-  document.querySelectorAll(".screen").forEach(screen => {
-    screen.classList.remove("active");
-  });
-}
-
 // ---------- Create Room ----------
 async function createRoom() {
   const name = $("hostName").value.trim();
@@ -325,7 +319,7 @@ if (phase === "waiting") {
   // Show Begin Game only when full
   $("begin-game-btn").classList.toggle(
     "hidden",
-    !(isHost && numPlayers === total)
+    !(isHost && phase === "waiting" && numPlayers === total)
   );
 
   return;
@@ -389,12 +383,6 @@ if (phase === "guessing-intro") {
 
   // --- Update room code and player count ---
   $("room-code-display-game").textContent = roomCode;
-
-  // --- Host-only Begin Game button ---
-  $("begin-game-btn").classList.toggle(
-    "hidden",
-    !(isHost && phase === "waiting" && numPlayers === total)
-  );
 
 // ---------- Q&A ----------
 function startQA() {
@@ -530,6 +518,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
