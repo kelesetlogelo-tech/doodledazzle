@@ -417,34 +417,50 @@ body.waiting-to-guess-phase {
   color: #1e3a8a;
 }
 
-.guessing-intro-screen {
-  background: #cfe8ff; /* pastel blue */
-  color: black;
+/* ========================= */
+/* Base Screen Style */
+/* ========================= */
+.screen {
+  display: none;
+  width: 100%;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.guess-card {
-  background: white;
-  padding: 20px;
-  margin: 20px auto;
-  width: 80%;
-  border-radius: 20px;
-  animation: slideIn 0.5s ease;
+/* When active */
+.screen.active {
+  display: flex;
 }
 
-@keyframes slideIn {
-  from { transform: translateX(100px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.page {
+/* Hidden utility */
+.hidden {
   display: none;
 }
 
-.page.active {
-  display: block;
+/* ========================= */
+/* Guessing Intro Styling */
+/* ========================= */
+#guessing-intro {
+  background-color: white;
+  color: black; /* FORCE BLACK TEXT */
 }
 
+#guessing-intro h1 {
+  font-size: 42px;
+  margin-bottom: 20px;
+  color: black;
+}
 
+#guessing-intro p {
+  font-size: 20px;
+  color: black;
+}
+
+.intro-content {
+  max-width: 600px;
+}
 
 
 
