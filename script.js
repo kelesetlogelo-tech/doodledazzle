@@ -274,10 +274,17 @@ function updateRoomUI(data, code) {
 
     transitionToPhase("qa");
 
-    if (allReady && isHost) {
-      gameRef.child("phase").set("waiting-to-guess");
-      return;
-    }
+   if (allReady && isHost) {
+
+  const updates = { phase: "waiting-to-guess" };
+
+  Object.keys(players).forEach(p => {
+    updates[`players/${p}/ready`] = false;
+  });
+
+  gameRef.update(updates);
+  return;
+}
 
     if (!window.qaStarted) startQA();
     return;
@@ -297,6 +304,11 @@ function updateRoomUI(data, code) {
         ? `Waiting on ${waitingCount} player${waitingCount > 1 ? "s" : ""}...`
         : "👀";
     return;
+  
+   console.log("isHost:", isHost);
+   console.log("readyCount:", readyCount);
+   console.log("total:", total);
+   console.log("allReady:", allReady);
   }
 
   // ------------------------
@@ -495,6 +507,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
