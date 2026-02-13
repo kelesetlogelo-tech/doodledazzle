@@ -417,7 +417,7 @@ if (phase === "waiting") {
 
     return;
   }
-
+}
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -551,3 +551,4 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
