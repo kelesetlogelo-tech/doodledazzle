@@ -13,15 +13,12 @@ html, body {
   color: #fff;
 }
 
-/* ===== CONTAINERS ===== */
-/* ===== PAGE VISIBILITY SYSTEM ===== */
-
-/* All pages hidden by default */
+/* ===== PAGE VISIBILITY SYSTEM (single source of truth) ===== */
 .page {
-  display: none;
-  transform: translateY(10px);
+  display: none;              /* hidden by default */
   opacity: 0;
-  transition: opacity 0.5s ease, transform 0.5s ease;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
   text-align: center;
   justify-content: center;
   align-items: center;
@@ -29,27 +26,12 @@ html, body {
   padding: 2rem;
 }
 
-/* Script removes .hidden to show a section */
-.page:not(.hidden) {
-  display: flex; /* restores flex layout */
+.page.is-active {
+  display: flex;              /* ONLY the active page is displayed */
   opacity: 1;
   transform: translateY(0);
 }
 
-/* Explicit hidden class */
-.hidden {
-  display: none !important;
-}
-
-/* Smooth fade between pages */
-.page {
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-
-.page.is-active {
-  opacity: 1;
-}
 
 
 .container {
@@ -482,6 +464,7 @@ body.waiting-to-guess-phase {
   margin-top: 18px;
   font-weight: 700;
 }
+
 
 
 
