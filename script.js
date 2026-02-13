@@ -171,7 +171,6 @@ function transitionToPhase(phaseId) {
   updateBackgroundForPhase(phaseId);
 }
 
-
   // Fade out current
   if (current) current.classList.remove("is-active");
 
@@ -190,7 +189,7 @@ function transitionToPhase(phaseId) {
     target.classList.add("is-active");
     updateBackgroundForPhase(phase);
   }, 350); // matches CSS transition duration
-}
+
 
 function updateBackgroundForPhase(phase) {
   document.body.className = document.body.className
@@ -527,6 +526,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
