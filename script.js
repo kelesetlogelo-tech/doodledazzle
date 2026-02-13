@@ -276,48 +276,88 @@ function updateRoomUI(data, code) {
   const total = data.numPlayers || 0;
   const numPlayers = Object.keys(players).length;
   const phase = data.phase;
+
   const readyCount = Object.values(players).filter(p => p.ready).length;
-  const allReady = numPlayers === total && Object.values(players).every(p => p.ready);
+  const allReady = numPlayers === total && readyCount === total;
 
   // ------------------------
-// GUESSING INTRO
-// ------------------------
-// ------------------------
-// GUESSING INTRO (must be BEFORE waiting-to-guess block)
-// ------------------------
-if (phase === "guessing-intro") {
-  console.log("🎬 Showing guessing intro");
+  // GUESSING INTRO (MUST BE FIRST)
+  // ------------------------
+  if (phase === "guessing-intro") {
+    console.log("🎬 Showing guessing intro");
 
-  transitionToPhase("guessing-intro"); // this must hide everything else
+    transitionToPhase("guessing-intro"); // hides all other pages
 
-  // Start the 10s timer only once (host only)
-  if (isHost && !window._guessIntroTimerStarted) {
-    window._guessIntroTimerStarted = true;
+    if (isHost && !window._guessIntroTimerStarted) {
+      window._guessIntroTimerStarted = true;
 
-    setTimeout(() => {
-      gameRef.child("phase").set("guessing");
-      window._guessIntroTimerStarted = false; // reset for next round if needed
-    }, 10000);
+      setTimeout(() => {
+        gameRef.child("phase").set("guessing");
+        window._guessIntroTimerStarted = false;
+      }, 10000);
+    }
+
+    return;
   }
 
-  return; // ✅ IMPORTANT: stop here so waiting-to-guess doesn’t re-show
-}
-
   // ------------------------
-  // WAITING
+  // WAITING TO GUESS
   // ------------------------
   if (phase === "waiting-to-guess") {
-
     transitionToPhase("waiting-to-guess");
 
     $("room-code-display-game").textContent = code;
-  
 
     $("players-list").innerHTML = Object.keys(players)
       .map(p => `<li>${p}${players[p].ready ? " ✅" : ""}</li>`)
       .join("");
 
+    // ✅ host should ONLY see button when everyone is ready
     $("begin-guessing-btn").classList.toggle(
+      "hidden",
+      !(isHost && allReady)
+    );
+
+    return;
+  }
+
+  // ------------------------
+  // QA
+  // ------------------------
+  if (phase === "qa") {
+    transitionToPhase("qa");
+
+    console.log("QA check → ready:", readyCount, "/", total);
+
+    if (allReady && isHost) {
+      console.log("All players done. Moving to waiting-to-guess.");
+      gameRef.child("phase").set("waiting-to-guess");
+      return;
+    }
+
+    if (!window.qaStarted) startQA();
+    return;
+  }
+
+  // ------------------------
+  // WAITING (LOBBY)
+  // ------------------------
+  if (phase === "waiting") {
+    transitionToPhase("waiting");
+
+    $("room-code-display-game").textContent = code;
+
+    const playersNeeded = total - numPlayers;
+    $("players-count").textContent =
+      playersNeeded > 0
+        ? `Waiting on ${playersNeeded} player${playersNeeded > 1 ? "s" : ""}...`
+        : `All ${total} players joined ✅`;
+
+    $("players-list").innerHTML = Object.keys(players)
+      .map(p => `<li>${p}</li>`)
+      .join("");
+
+    $("begin-game-btn").classList.toggle(
       "hidden",
       !(isHost && numPlayers === total)
     );
@@ -326,72 +366,12 @@ if (phase === "guessing-intro") {
   }
 
   // ------------------------
-// QA
-// ------------------------
-if (phase === "qa") {
-
-  transitionToPhase("qa");
-
-  const readyCount = Object.values(players).filter(p => p.ready).length;
-  const allReady = readyCount === total;
-
-  console.log("QA check → ready:", readyCount, "/", total);
-
-  if (allReady && isHost) {
-    console.log("All players done. Moving to waiting-to-guess.");
-    gameRef.child("phase").set("waiting-to-guess");
-    return;
-  }
-
-  if (!window.qaStarted) startQA();
-
-  return;
-}
-
-  // ------------------------
-// WAITING (Lobby)
-// ------------------------
-if (phase === "waiting") {
-
-  transitionToPhase("waiting");
-
-  // Update room code
-  $("room-code-display-game").textContent = code;
-
-  // Update player count correctly
-  const playersNeeded = total - numPlayers;
-
-  if (playersNeeded > 0) {
-    $("players-count").textContent =
-      `Waiting on ${playersNeeded} player${playersNeeded > 1 ? "s" : ""}...`;
-  } else {
-    $("players-count").textContent =
-      `All ${total} players joined ✅`;
-  }
-
-  // Update player list
-  $("players-list").innerHTML = Object.keys(players)
-    .map(p => `<li>${p}</li>`)
-    .join("");
-
-  // Show Begin Game only when full
-  $("begin-game-btn").classList.toggle(
-    "hidden",
-    !(isHost && phase === "waiting" && numPlayers === total)
-  );
-
-  return;
-}
-
-  // ------------------------
   // GUESSING
   // ------------------------
   if (phase === "guessing") {
-
     transitionToPhase("guessing");
 
     if (isHost && !data.targetOrder) {
-
       const sortedPlayers = Object.keys(players).sort();
 
       gameRef.update({
@@ -414,10 +394,10 @@ if (phase === "waiting") {
 
     const targetPlayer = targetOrder[currentIndex];
     renderGuessingUI(targetPlayer, data);
-
     return;
   }
 }
+
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -551,4 +531,5 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
