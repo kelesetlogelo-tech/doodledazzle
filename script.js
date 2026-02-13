@@ -419,11 +419,6 @@ if (phase === "waiting") {
     return;
   }
 
-}
-
-  // --- Update room code and player count ---
-  $("room-code-display-game").textContent = roomCode;
-
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -558,6 +553,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
