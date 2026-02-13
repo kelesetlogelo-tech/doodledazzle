@@ -279,7 +279,6 @@ function updateRoomUI(data, code) {
   const readyCount = Object.values(players).filter(p => p.ready).length;
   const allReady = numPlayers === total && Object.values(players).every(p => p.ready);
 
-
   // ------------------------
 // GUESSING INTRO
 // ------------------------
@@ -541,7 +540,6 @@ function checkIfAllGuessesComplete(targetPlayer) {
   });
 }
 
-
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
   if (e.target.id === "room-code-display-game") {
@@ -553,3 +551,4 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
