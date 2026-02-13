@@ -31,8 +31,7 @@ html, body {
 
 /* Script removes .hidden to show a section */
 .page:not(.hidden) {
-  display: flex; 
-  flex direction: column; /* restores flex layout */
+  display: flex; /* restores flex layout */
   opacity: 1;
   transform: translateY(0);
 }
@@ -483,6 +482,7 @@ body.waiting-to-guess-phase {
   margin-top: 18px;
   font-weight: 700;
 }
+
 
 
 
