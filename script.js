@@ -283,36 +283,27 @@ function updateRoomUI(data, code) {
   // ------------------------
 // GUESSING INTRO
 // ------------------------
+// ------------------------
+// GUESSING INTRO (must be BEFORE waiting-to-guess block)
+// ------------------------
 if (phase === "guessing-intro") {
-  transitionToPhase("guessing-intro"); // ✅ show ONLY intro screen
-  // ✅ Force intro text (prevents blank screen even if HTML got edited)
-const banner = $("guess-intro-banner");
-const tagline = $("guess-intro-tagline");
-if (banner) banner.textContent = "Friendship Test: Prepare to Fail Spectacularly!";
-if (tagline) tagline.textContent = "Now's your chance to expose how well you really know them.";
+  console.log("🎬 Showing guessing intro");
 
+  transitionToPhase("guessing-intro"); // this must hide everything else
 
-  // ✅ countdown text (visible for everyone)
-  const countdownEl = $("guess-intro-countdown");
-  if (countdownEl) {
-    let secs = 10;
-    countdownEl.textContent = secs;
-    const t = setInterval(() => {
-      secs--;
-      countdownEl.textContent = secs;
-      if (secs <= 0) clearInterval(t);
-    }, 1000);
-  }
+  // Start the 10s timer only once (host only)
+  if (isHost && !window._guessIntroTimerStarted) {
+    window._guessIntroTimerStarted = true;
 
-  // ✅ only host advances to guessing after 10s
-  if (isHost) {
     setTimeout(() => {
       gameRef.child("phase").set("guessing");
+      window._guessIntroTimerStarted = false; // reset for next round if needed
     }, 10000);
   }
 
-  return; // ✅ CRITICAL: stop the function so it doesn't render waiting screen too
+  return; // ✅ IMPORTANT: stop here so waiting-to-guess doesn’t re-show
 }
+
   // ------------------------
   // WAITING
   // ------------------------
@@ -567,6 +558,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
