@@ -42,6 +42,17 @@ html, body {
   display: none !important;
 }
 
+/* Smooth fade between pages */
+.page {
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.page.is-active {
+  opacity: 1;
+}
+
+
 .container {
   max-width: 400px;
   width: 100%;
@@ -472,6 +483,7 @@ body.waiting-to-guess-phase {
   margin-top: 18px;
   font-weight: 700;
 }
+
 
 
 
