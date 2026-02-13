@@ -157,45 +157,44 @@ document.addEventListener("DOMContentLoaded", () => {
 function transitionToPhase(phase) {
   console.log("🌈 transitionToPhase:", phase);
 
-  // 1) Hide all pages
-  document.querySelectorAll("section.page").forEach(s => s.classList.add("hidden"));
+  const all = Array.from(document.querySelectorAll("section.page"));
+  const current = document.querySelector("section.page:not(.hidden)");
 
-  // 2) Try multiple possible IDs for the same phase
-  const candidates = [
-    phase,                              // guessing-intro
-    phase.replace(/-/g, ""),            // guessingintro
-    phase.replace(/-/g, "_"),           // guessing_intro
-    phase.replace(/-/g, "") + "Phase",  // guessingintroPhase
-    phase + "Phase",                    // guessing-introPhase
-    phase.replace(/-/g, "") + "-phase", // guessingintro-phase
-  ];
+  // Find target by exact id
+  const target = document.getElementById(phase);
 
-  let target = null;
-  for (const id of candidates) {
-    const el = document.getElementById(id);
-    if (el) {
-      target = el;
-      break;
-    }
-  }
-
-  // 3) If we still didn't find it, show a loud error and fall back to lobby
   if (!target) {
-    console.error("❌ transitionToPhase failed. No section found for:", phase, "Tried:", candidates);
-
-    // fallback so you never get a blank screen
-    const fallback = document.getElementById("waiting") || document.getElementById("createJoin");
-    if (fallback) fallback.classList.remove("hidden");
+    console.error("❌ No section found for phase:", phase);
     return;
   }
 
-  // 4) Show the correct section
-  target.classList.remove("hidden");
+  // If already on target, just ensure it's visible
+  if (current === target) {
+    target.classList.remove("hidden");
+    target.classList.add("is-active");
+    updateBackgroundForPhase(phase);
+    return;
+  }
 
-  // 5) Update background
-  updateBackgroundForPhase(phase);
+  // Fade out current
+  if (current) current.classList.remove("is-active");
+
+  // After fade out, hide all and show target
+  setTimeout(() => {
+    all.forEach(s => {
+      s.classList.add("hidden");
+      s.classList.remove("is-active");
+    });
+
+    target.classList.remove("hidden");
+
+    // Force reflow so fade-in always triggers
+    void target.offsetWidth;
+
+    target.classList.add("is-active");
+    updateBackgroundForPhase(phase);
+  }, 350); // matches CSS transition duration
 }
-
 
 function updateBackgroundForPhase(phase) {
   document.body.className = document.body.className
@@ -280,6 +279,40 @@ function updateRoomUI(data, code) {
   const readyCount = Object.values(players).filter(p => p.ready).length;
   const allReady = numPlayers === total && Object.values(players).every(p => p.ready);
 
+
+  // ------------------------
+// GUESSING INTRO
+// ------------------------
+if (phase === "guessing-intro") {
+  transitionToPhase("guessing-intro"); // ✅ show ONLY intro screen
+  // ✅ Force intro text (prevents blank screen even if HTML got edited)
+const banner = $("guess-intro-banner");
+const tagline = $("guess-intro-tagline");
+if (banner) banner.textContent = "Friendship Test: Prepare to Fail Spectacularly!";
+if (tagline) tagline.textContent = "Now's your chance to expose how well you really know them.";
+
+
+  // ✅ countdown text (visible for everyone)
+  const countdownEl = $("guess-intro-countdown");
+  if (countdownEl) {
+    let secs = 10;
+    countdownEl.textContent = secs;
+    const t = setInterval(() => {
+      secs--;
+      countdownEl.textContent = secs;
+      if (secs <= 0) clearInterval(t);
+    }, 1000);
+  }
+
+  // ✅ only host advances to guessing after 10s
+  if (isHost) {
+    setTimeout(() => {
+      gameRef.child("phase").set("guessing");
+    }, 10000);
+  }
+
+  return; // ✅ CRITICAL: stop the function so it doesn't render waiting screen too
+}
   // ------------------------
   // WAITING
   // ------------------------
@@ -358,40 +391,6 @@ if (phase === "waiting") {
   );
 
   return;
-}
-
-// ------------------------
-// GUESSING INTRO
-// ------------------------
-if (phase === "guessing-intro") {
-  transitionToPhase("guessing-intro"); // ✅ show ONLY intro screen
-  // ✅ Force intro text (prevents blank screen even if HTML got edited)
-const banner = $("guess-intro-banner");
-const tagline = $("guess-intro-tagline");
-if (banner) banner.textContent = "Friendship Test: Prepare to Fail Spectacularly!";
-if (tagline) tagline.textContent = "Now's your chance to expose how well you really know them.";
-
-
-  // ✅ countdown text (visible for everyone)
-  const countdownEl = $("guess-intro-countdown");
-  if (countdownEl) {
-    let secs = 10;
-    countdownEl.textContent = secs;
-    const t = setInterval(() => {
-      secs--;
-      countdownEl.textContent = secs;
-      if (secs <= 0) clearInterval(t);
-    }, 1000);
-  }
-
-  // ✅ only host advances to guessing after 10s
-  if (isHost) {
-    setTimeout(() => {
-      gameRef.child("phase").set("guessing");
-    }, 10000);
-  }
-
-  return; // ✅ CRITICAL: stop the function so it doesn't render waiting screen too
 }
 
   // ------------------------
