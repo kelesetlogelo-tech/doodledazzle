@@ -155,19 +155,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ---------- Page Switching ----------
 function transitionToPhase(phaseId) {
-  // hide all pages
-  document.querySelectorAll("section.page").forEach(s => {
-    s.classList.remove("is-active");
+  // 1) Turn OFF all pages
+  document.querySelectorAll("section.page").forEach(section => {
+    section.classList.remove("is-active");
   });
 
-  // show the target page
-  const el = document.getElementById(phaseId);
-  if (!el) {
+  // 2) Turn ON the requested page
+  const target = document.getElementById(phaseId);
+  if (!target) {
     console.error("❌ Missing section id:", phaseId);
     return;
   }
 
-  el.classList.add("is-active");
+  target.classList.add("is-active");
+
+  // 3) Optional: update background classes
   updateBackgroundForPhase(phaseId);
 }
 
@@ -526,6 +528,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
