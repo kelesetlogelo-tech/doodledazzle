@@ -183,7 +183,7 @@ function updateBackgroundForPhase(phaseId) {
     .split(" ")
     .filter(c => !c.endsWith("-phase"))
     .join(" ");
-  document.body.classList.add(`${phase}-phase`);
+  document.body.classList.add(`${phaseId}-phase`);
 }
 
 // ---------- Create Room ----------
@@ -513,6 +513,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
