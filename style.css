@@ -465,6 +465,10 @@ body.waiting-to-guess-phase {
   font-weight: 700;
 }
 
+/* ---- FINAL VISIBILITY OVERRIDE (put at the bottom) ---- */
+section.page { display: none !important; }
+section.page.is-active { display: flex !important; opacity: 1 !important; }
+
 
 
 
