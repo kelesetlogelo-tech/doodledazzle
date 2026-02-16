@@ -14,6 +14,10 @@ let roomCode = null;
 let currentQuestion = 0;
 let answers = {};
 let introTimerStarted = false;
+let guessingQuestionIndex = 0;
+let currentGuessTarget = null;
+let isSubmittingGuess = false;
+
 window.qaStarted = false;
 
 /*************************************************
@@ -347,37 +351,43 @@ function updateRoomUI(data, code) {
     return;
   }
 
-  // ------------------------
-  // GUESSING
-  // ------------------------
-  if (phase === "guessing") {
-    transitionToPhase("guessing");
+ // ------------------------
+// GUESSING
+// ------------------------
+if (phase === "guessing") {
+  transitionToPhase("guessing");
 
-    if (isHost && !data.targetOrder) {
-      const sortedPlayers = Object.keys(players).sort();
+  // Host sets up target order once
+  if (isHost && !data.targetOrder) {
+    const sortedPlayers = Object.keys(players).sort((a, b) =>
+      a.toLowerCase().localeCompare(b.toLowerCase())
+    );
 
-      gameRef.update({
-        targetOrder: sortedPlayers,
-        currentTargetIndex: 0
-      });
+    gameRef.update({
+      targetOrder: sortedPlayers,
+      currentTargetIndex: 0
+    });
 
-      return;
-    }
-
-    const targetOrder = data.targetOrder;
-    const currentIndex = data.currentTargetIndex;
-
-    if (!targetOrder || currentIndex === undefined) return;
-
-    if (currentIndex >= targetOrder.length) {
-      gameRef.child("phase").set("results");
-      return;
-    }
-
-    const targetPlayer = targetOrder[currentIndex];
-    renderGuessingUI(targetPlayer, data);
     return;
   }
+
+  const targetOrder = data.targetOrder;
+  const currentIndex = data.currentTargetIndex;
+
+  if (!targetOrder || currentIndex === undefined) return;
+
+  // Finished all targets
+  if (currentIndex >= targetOrder.length) {
+    gameRef.child("phase").set("results");
+    return;
+  }
+
+  const targetPlayer = targetOrder[currentIndex];
+
+  // Render the guessing UI for this round
+  renderGuessingRound(targetPlayer, data, players);
+
+  return;
 }
 
 // ---------- Q&A ----------
@@ -502,6 +512,154 @@ function checkIfAllGuessesComplete(targetPlayer) {
   });
 }
 
+// ------------------------
+// GUESSING ROUND ENGINE
+// ------------------------
+function renderGuessingRound(targetPlayer, data, players) {
+  const titleEl = $("guess-target-name");
+  const taglineEl = $("guess-tagline");
+  const cardEl = $("guess-card");
+
+  if (!titleEl || !taglineEl || !cardEl) {
+    console.error("🚨 Missing guessing phase elements (guess-target-name / guess-tagline / guess-card)");
+    return;
+  }
+
+  // Reset local index if target changed
+  if (currentGuessTarget !== targetPlayer) {
+    currentGuessTarget = targetPlayer;
+    guessingQuestionIndex = 0;
+    isSubmittingGuess = false;
+  }
+
+  titleEl.textContent = `TARGET: ${targetPlayer}`;
+
+  // Target player should NOT guess their own answers
+  if (playerId === targetPlayer) {
+    const totalPlayers = Object.keys(players).length;
+    const doneCount = countGuessDone(data, targetPlayer);
+    taglineEl.textContent = `Sit tight 😌 Everyone else is exposing themselves… (${doneCount}/${totalPlayers - 1} finished)`;
+    cardEl.innerHTML = `<div style="margin-top:2rem;font-weight:700;">You can’t guess your own vibe 😭</div>`;
+    return;
+  }
+
+  taglineEl.textContent = `Pick what you think ${targetPlayer} answered 👀`;
+
+  // Find the next unanswered question index for THIS guesser + THIS target
+  const nextIndex = findNextUnansweredIndex(data, targetPlayer, playerId);
+
+  // If finished all 10 guesses, mark done + show waiting text
+  if (nextIndex >= questions.length) {
+    cardEl.innerHTML = `<div style="margin-top:2rem;font-weight:800;">Done ✅ Waiting for others…</div>`;
+    markGuessDone(targetPlayer);
+    // Host may advance to next target when everyone is done
+    maybeAdvanceTargetIfHost(data, players, targetPlayer);
+    return;
+  }
+
+  // Render 1 card
+  renderGuessCard(cardEl, titleEl, taglineEl, targetPlayer, nextIndex, data, players);
+}
+
+function renderGuessCard(cardEl, titleEl, taglineEl, targetPlayer, qIndex, data, players) {
+  const q = questions[qIndex];
+  if (!q) return;
+
+  // Basic slide-in animation class (CSS optional, but recommended)
+  cardEl.innerHTML = `
+    <div class="guess-tile slide-in">
+      <div class="guess-q">${q.text}</div>
+      <div class="guess-options">
+        ${q.options.map(opt => `<button class="guess-opt-btn" data-opt="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`).join("")}
+      </div>
+      <div class="guess-progress">Question ${qIndex + 1} / ${questions.length}</div>
+    </div>
+  `;
+
+  const tile = cardEl.querySelector(".guess-tile");
+  cardEl.querySelectorAll(".guess-opt-btn").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      if (isSubmittingGuess) return;
+      isSubmittingGuess = true;
+
+      const chosen = btn.getAttribute("data-opt");
+
+      try {
+        await saveGuess(targetPlayer, qIndex, chosen);
+
+        // slide out then render next
+        if (tile) tile.classList.add("slide-out");
+
+        setTimeout(() => {
+          isSubmittingGuess = false;
+          // Re-render from Firebase state (safer) OR local increment:
+          // We re-render using the latest snapshot via updateRoomUI,
+          // but this local call also helps if Firebase is slightly delayed.
+          renderGuessingRound(targetPlayer, data, players);
+        }, 280);
+      } catch (err) {
+        console.error("Failed to save guess:", err);
+        isSubmittingGuess = false;
+      }
+    });
+  });
+}
+
+async function saveGuess(targetPlayer, questionIndex, answerText) {
+  if (!gameRef || !playerId) return;
+
+  // Save guess: rooms/{code}/guesses/{target}/{guesser}/{qIndex} = answerText
+  await gameRef.child(`guesses/${targetPlayer}/${playerId}/${questionIndex}`).set(answerText);
+}
+
+function findNextUnansweredIndex(data, targetPlayer, guesserId) {
+  const guessesForTarget = data.guesses?.[targetPlayer]?.[guesserId] || {};
+  for (let i = 0; i < questions.length; i++) {
+    if (guessesForTarget[i] === undefined) return i;
+  }
+  return questions.length; // done
+}
+
+async function markGuessDone(targetPlayer) {
+  if (!gameRef || !playerId) return;
+  await gameRef.child(`guessDone/${targetPlayer}/${playerId}`).set(true);
+}
+
+function countGuessDone(data, targetPlayer) {
+  const doneMap = data.guessDone?.[targetPlayer] || {};
+  // counts how many players (excluding target) marked done
+  return Object.values(doneMap).filter(v => v === true).length;
+}
+
+function maybeAdvanceTargetIfHost(data, players, targetPlayer) {
+  if (!isHost || !gameRef) return;
+
+  const doneMap = data.guessDone?.[targetPlayer] || {};
+  const playerNames = Object.keys(players);
+
+  // everyone except target must be done
+  const allNonTargetDone = playerNames
+    .filter(name => name !== targetPlayer)
+    .every(name => doneMap[name] === true);
+
+  if (!allNonTargetDone) return;
+
+  // advance to next target
+  gameRef.child("currentTargetIndex").transaction(i => (i || 0) + 1);
+
+  // (optional) you can clear done for next round, but since it's nested per target, it’s fine to keep it
+}
+
+// Tiny helper for safe HTML in templates
+function escapeHtml(str) {
+  return String(str)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+  
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
   if (e.target.id === "room-code-display-game") {
@@ -513,6 +671,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
