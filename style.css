@@ -469,6 +469,62 @@ body.waiting-to-guess-phase {
 section.page { display: none !important; }
 section.page.is-active { display: flex !important; opacity: 1 !important; }
 
+/* Guessing tile + slide animation */
+.guess-tile {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+  background: rgba(255,255,255,0.85);
+  color: #111;
+  border-radius: 18px;
+  padding: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.guess-q {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+
+.guess-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.guess-opt-btn {
+  padding: 12px 14px;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.guess-progress {
+  margin-top: 14px;
+  font-weight: 700;
+  opacity: 0.75;
+}
+
+.slide-in {
+  animation: slideIn 0.28s ease both;
+}
+
+.slide-out {
+  animation: slideOut 0.28s ease both;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(30px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-30px); opacity: 0; }
+}
+
 
 
 
