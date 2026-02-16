@@ -188,6 +188,7 @@ function transitionToPhase(phaseId) {
     updateBackgroundForPhase(phase);
   }, 350); // matches CSS transition duration
 
+}
 
 function updateBackgroundForPhase(phase) {
   document.body.className = document.body.className
@@ -524,6 +525,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
