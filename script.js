@@ -388,7 +388,8 @@ if (phase === "guessing") {
   renderGuessingRound(targetPlayer, data, players);
 
   return;
-}
+  }
+}  
 
 // ---------- Q&A ----------
 function startQA() {
@@ -671,6 +672,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
