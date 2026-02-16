@@ -155,11 +155,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // ---------- Page Switching ----------
 function transitionToPhase(phaseId) {
-  // 1) Turn OFF all pages
-  document.querySelectorAll("section.page").forEach(section => {
-    section.classList.remove("is-active");
-  });
+  const allSections = Array.from(document.querySelectorAll("section.page"));
 
+  //Hide everything
+  allSections.forEach(s => {
+      s.classList.add("hidden");
+      s.classList.remove("is-active");
+    });
+  
   // 2) Turn ON the requested page
   const target = document.getElementById(phaseId);
   if (!target) {
@@ -167,30 +170,15 @@ function transitionToPhase(phaseId) {
     return;
   }
 
-  target.classList.add("is-active");
-  // 3) Optional: update background classes
-  updateBackgroundForPhase(phaseId);
-
-
-  // After fade out, hide all and show target
-  setTimeout(() => {
-    all.forEach(s => {
-      s.classList.add("hidden");
-      s.classList.remove("is-active");
-    });
-
     target.classList.remove("hidden");
-
     // Force reflow so fade-in always triggers
     void target.offsetWidth;
-
     target.classList.add("is-active");
-    updateBackgroundForPhase(phase);
-  }, 350); // matches CSS transition duration
-
+    
+    updateBackgroundForPhase(phaseId);
 }
 
-function updateBackgroundForPhase(phase) {
+function updateBackgroundForPhase(phaseId) {
   document.body.className = document.body.className
     .split(" ")
     .filter(c => !c.endsWith("-phase"))
@@ -525,6 +513,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
