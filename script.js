@@ -168,13 +168,9 @@ function transitionToPhase(phaseId) {
   }
 
   target.classList.add("is-active");
-
   // 3) Optional: update background classes
   updateBackgroundForPhase(phaseId);
-}
 
-  // Fade out current
-  if (current) current.classList.remove("is-active");
 
   // After fade out, hide all and show target
   setTimeout(() => {
@@ -528,6 +524,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
