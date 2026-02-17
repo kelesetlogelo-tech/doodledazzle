@@ -631,8 +631,6 @@ function findNextUnansweredIndex(data, targetPlayer, guesserId) {
   return questions.length;
 }
 
-}
-
 async function markGuessDone(targetPlayer) {
   if (!gameRef || !playerId) return;
   await gameRef.child(`guessDone/${targetPlayer}/${playerId}`).set(true);
@@ -684,6 +682,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
