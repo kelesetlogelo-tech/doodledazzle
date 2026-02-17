@@ -18,6 +18,9 @@ let guessingQuestionIndex = 0;
 let currentGuessTarget = null;
 let isSubmittingGuess = false;
 let lastRenderedGuessKey = null; // prevents duplicate tiles
+let lastTargetAdvanced = null;      // host-only guard
+let lastGuessDoneMarked = null;     // per player guard
+
 
 window.qaStarted = false;
 
@@ -564,6 +567,11 @@ function findNextUnansweredIndex(data, targetPlayer, guesserId) {
 
 async function markGuessDone(targetPlayer) {
   if (!gameRef || !playerId) return;
+    // ✅ prevent re-writing "done" repeatedly for same target
+  const key = `${targetPlayer}|${playerId}`;
+  if (lastGuessDoneMarked === key) return;
+  lastGuessDoneMarked = key;
+  
   await gameRef.child(`guessDone/${targetPlayer}/${playerId}`).set(true);
 }
 
@@ -579,17 +587,18 @@ function maybeAdvanceTargetIfHost(data, players, targetPlayer) {
   const doneMap = data.guessDone?.[targetPlayer] || {};
   const playerNames = Object.keys(players);
 
-  // everyone except target must be done
   const allNonTargetDone = playerNames
     .filter(name => name !== targetPlayer)
     .every(name => doneMap[name] === true);
 
   if (!allNonTargetDone) return;
 
+  // ✅ prevent advancing twice for the same target
+  if (lastTargetAdvanced === targetPlayer) return;
+  lastTargetAdvanced = targetPlayer;
+
   // advance to next target
   gameRef.child("currentTargetIndex").transaction(i => (i || 0) + 1);
-
-  // (optional) you can clear done for next round, but since it's nested per target, it’s fine to keep it
 }
 
 // Tiny helper for safe HTML in templates
@@ -613,6 +622,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
