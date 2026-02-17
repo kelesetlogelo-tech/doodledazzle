@@ -559,6 +559,45 @@ section.page.is-active { display: flex !important; opacity: 1 !important; }
   font-weight: 700;
 }
 
+/* ================================
+   GUESSING PHASE LAYOUT
+   ================================ */
+
+body.guessing-phase {
+  background: linear-gradient(135deg, #fff7c2, #fff2a6); /* pastel yellow */
+}
+
+/* Make guessing page a top-down layout */
+#guessing.page {
+  justify-content: flex-start;   /* push content to top */
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  padding-top: 2rem;
+}
+
+/* Target name top centre */
+#guess-target-name {
+  margin-top: 0.5rem;
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+
+/* Tagline just below target */
+#guess-tagline {
+  margin-top: 0.8rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  opacity: 0.9;
+}
+
+/* The card area sits a few spaces below */
+#guess-card, #guess-container {
+  margin-top: 2.5rem;
+  width: 100%;
+  max-width: 520px;
+}
+
 
 
 
