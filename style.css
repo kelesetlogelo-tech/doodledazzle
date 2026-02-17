@@ -525,6 +525,40 @@ section.page.is-active { display: flex !important; opacity: 1 !important; }
   to   { transform: translateX(-30px); opacity: 0; }
 }
 
+/* ================================
+   GUESSING PHASE – FORCE VISIBLE TEXT
+   ================================ */
+
+/* Make ALL text inside guessing-intro + guessing black */
+#guessing-intro,
+#guessing {
+  color: #111 !important;
+}
+
+#guessing-intro *,
+#guessing * {
+  color: #111 !important;
+}
+
+/* If your guessing tiles have these classes */
+.guess-tile,
+.guess-q,
+.guess-progress,
+#guess-target-name,
+#guess-tagline {
+  color: #111 !important;
+}
+
+/* Buttons inside guessing tiles */
+.guess-opt-btn {
+  color: #111 !important;
+  background: rgba(255,255,255,0.9);
+  border: 0;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 700;
+}
+
 
 
 
