@@ -17,6 +17,7 @@ let introTimerStarted = false;
 let guessingQuestionIndex = 0;
 let currentGuessTarget = null;
 let isSubmittingGuess = false;
+let lastRenderedGuessKey = null; // prevents duplicate tiles
 
 window.qaStarted = false;
 
@@ -437,82 +438,6 @@ async function markReady() {
   transitionToPhase("qa");
  }
 
-function renderGuessingUI(targetPlayer, data) {
-
-  console.log("Rendering UI for:", targetPlayer);
-
-  const titleEl = document.getElementById("guess-target-name");
-  const container = document.getElementById("guess-container");
-
-  console.log("Title element:", titleEl);
-  console.log("Container element:", container);
-
-  if (!titleEl || !container) {
-    console.error("🚨 Guessing HTML elements missing!");
-    return;
-  }
-
-  titleEl.textContent = "TARGET: " + targetPlayer;
-  container.innerHTML = "<h3>Guessing phase is rendering correctly 🎉</h3>";
-}
-
-function renderGuessCards(targetPlayer, data) {
-
-  const container = $("guess-container");
-  container.innerHTML = "";
-
-  questions.forEach((q, index) => {
-
-    const card = document.createElement("div");
-    card.className = "guess-card";
-
-    const question = document.createElement("h3");
-    question.textContent = q.text;
-
-    card.appendChild(question);
-
-    q.options.forEach(option => {
-      const btn = document.createElement("button");
-      btn.textContent = option;
-
-      btn.addEventListener("click", () => {
-        saveGuess(targetPlayer, index, option);
-      });
-
-      card.appendChild(btn);
-    });
-
-    container.appendChild(card);
-  });
-}
-
-function saveGuess(targetPlayer, questionIndex, answer) {
-
-  gameRef
-    .child(`guesses/${targetPlayer}/${playerId}/${questionIndex}`)
-    .set(answer);
-
-  checkIfAllGuessesComplete(targetPlayer);
-}
-
-function checkIfAllGuessesComplete(targetPlayer) {
-
-  gameRef.child("guesses/" + targetPlayer).once("value", snap => {
-
-    const guesses = snap.val() || {};
-    const guessers = Object.keys(guesses);
-
-    const totalPlayers = Object.keys(players).length;
-
-    if (guessers.length === totalPlayers - 1) {
-
-      if (isHost) {
-        gameRef.child("currentTargetIndex").transaction(i => i + 1);
-      }
-    }
-  });
-}
-
 // ------------------------
 // GUESSING ROUND ENGINE
 // ------------------------
@@ -531,6 +456,7 @@ function renderGuessingRound(targetPlayer, data, players) {
     currentGuessTarget = targetPlayer;
     guessingQuestionIndex = 0;
     isSubmittingGuess = false;
+    lastRenderedGuessKey = null; // ✅ reset
   }
 
   titleEl.textContent = `TARGET: ${targetPlayer}`;
@@ -563,6 +489,11 @@ function renderGuessingRound(targetPlayer, data, players) {
 }
 
 function renderGuessCard(cardEl, titleEl, taglineEl, targetPlayer, qIndex, data, players) {
+  // ✅ Prevent duplicate rendering of the same tile
+  const key = `${targetPlayer}|${playerId}|${qIndex}`;
+  if (lastRenderedGuessKey === key) return;
+  lastRenderedGuessKey = key;
+
   const q = questions[qIndex];
   if (!q) return;
 
@@ -682,6 +613,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
