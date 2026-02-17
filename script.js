@@ -591,13 +591,21 @@ function renderGuessCard(cardEl, titleEl, taglineEl, targetPlayer, qIndex, data,
         // slide out then render next
         if (tile) tile.classList.add("slide-out");
 
-        setTimeout(() => {
+  setTimeout(() => {
           isSubmittingGuess = false;
-          // Re-render from Firebase state (safer) OR local increment:
-          // We re-render using the latest snapshot via updateRoomUI,
-          // but this local call also helps if Firebase is slightly delayed.
-          renderGuessingRound(targetPlayer, data, players);
-        }, 280);
+
+      // ✅ Move to the next question locally
+         const nextIndex = qIndex + 1;
+         if (nextIndex >= questions.length) {
+           cardEl.innerHTML = `<div style="margin-top:2rem;font-weight:800;">Done ✅ Waiting for others…</div>`;
+           markGuessDone(targetPlayer);
+           maybeAdvanceTargetIfHost(data, players, targetPlayer);
+           return;
+  }
+
+  renderGuessCard(cardEl, titleEl, taglineEl, targetPlayer, nextIndex, data, players);
+}, 280);
+
       } catch (err) {
         console.error("Failed to save guess:", err);
         isSubmittingGuess = false;
@@ -610,15 +618,19 @@ async function saveGuess(targetPlayer, questionIndex, answerText) {
   if (!gameRef || !playerId) return;
 
   // Save guess: rooms/{code}/guesses/{target}/{guesser}/{qIndex} = answerText
-  await gameRef.child(`guesses/${targetPlayer}/${playerId}/${questionIndex}`).set(answerText);
+  await gameRef.child(`guesses/${targetPlayer}/${playerId}/${String(questionIndex)}`).set(answerText);
 }
 
 function findNextUnansweredIndex(data, targetPlayer, guesserId) {
   const guessesForTarget = data.guesses?.[targetPlayer]?.[guesserId] || {};
   for (let i = 0; i < questions.length; i++) {
-    if (guessesForTarget[i] === undefined) return i;
+    const a = guessesForTarget[i];
+    const b = guessesForTarget[String(i)];
+    if (a === undefined && b === undefined) return i;
   }
-  return questions.length; // done
+  return questions.length;
+}
+
 }
 
 async function markGuessDone(targetPlayer) {
@@ -672,6 +684,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
