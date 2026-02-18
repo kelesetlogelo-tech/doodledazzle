@@ -153,6 +153,17 @@ document.addEventListener("DOMContentLoaded", () => {
   gameRef.child("phase").set("guessing-intro");
 });
 
+  $("next-target-btn")?.addEventListener("click", async () => {
+  if (!isHost || !gameRef) return;
+
+  // move to next target
+  await gameRef.child("currentTargetIndex").transaction(i => (i || 0) + 1);
+
+  // optional: clear per-target done so the UI doesn't think everyone is still done
+  // (safe to keep if your doneMap is nested by target)
+});
+
+
   $("submit-answers-btn")?.addEventListener("click", async () => {
   if (!gameRef || !playerId) return;
 
@@ -388,10 +399,28 @@ if (phase === "guessing") {
 
   const targetPlayer = targetOrder[currentIndex];
 
+  const doneMap = data.guessDone?.[targetPlayer] || {};
+const allNonTargetDone = Object.keys(players)
+  .filter(name => name !== targetPlayer)
+  .every(name => doneMap[name] === true);
+
+const nextBtn = $("next-target-btn");
+if (nextBtn) {
+  nextBtn.classList.toggle("hidden", !isHost);
+  nextBtn.disabled = !allNonTargetDone; // button greys out until ready
+  nextBtn.style.opacity = allNonTargetDone ? "1" : "0.5";
+  nextBtn.style.cursor = allNonTargetDone ? "pointer" : "not-allowed";
+}
+
   // Render the guessing UI for this round
   renderGuessingRound(targetPlayer, data, players);
 
   return;
+  }
+// Host-only manual advance button
+const nextBtn = $("next-target-btn");
+if (nextBtn) {
+  nextBtn.classList.toggle("hidden", !isHost);
   }
 }  
 
@@ -622,6 +651,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
