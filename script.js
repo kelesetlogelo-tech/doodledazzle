@@ -417,11 +417,6 @@ if (nextBtn) {
 
   return;
   }
-// Host-only manual advance button
-const nextBtn = $("next-target-btn");
-if (nextBtn) {
-  nextBtn.classList.toggle("hidden", !isHost);
-  }
 }  
 
 // ---------- Q&A ----------
@@ -651,6 +646,7 @@ document.addEventListener("click", e => {
 });
 
 console.log("✅ Game script ready!");
+
 
 
 
