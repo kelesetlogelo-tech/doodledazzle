@@ -274,6 +274,7 @@ body.revealPhase-phase {
   font-size: 1rem;
 }
 
+
 /* ================================
    Q&A PHASE – FINAL ALIGNMENT
    ================================ */
@@ -675,121 +676,65 @@ body.guessing-phase {
   transform: translateY(0px) scale(0.98);
 }
 
+/* ================================
+   RESULTS PHASE (VIBRANT)
+   ================================ */
+
 body.results-phase {
-  background: linear-gradient(135deg, #ffe4e6, #fff7ed);
+  background: linear-gradient(135deg, #ff00cc, #3333ff, #00ffd5);
+  background-size: 200% 200%;
+  animation: resultsGlow 8s ease infinite;
 }
 
-#results .banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 1.2rem;
-  background: rgba(255,255,255,0.75);
-  color: #111;
-  font-size: 1.3rem;
-  font-weight: 900;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+@keyframes resultsGlow {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-#results .tagline {
-  margin-top: 6.5rem;
-  color: #111;
-  font-weight: 700;
-  opacity: 0.9;
-  text-align: center;
-}
+/* Banner uses your universal banner style already */
 
-#scoreboard-wrap {
-  margin-top: 2rem;
-  color: #111;
-  width: 100%;
+/* Content wrapper pushed down below banner + centered */
+#results-content {
+  margin-top: 7rem;              /* a few spaces below banner */
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 0 1.2rem;
 }
 
+/* Tagline spacing under banner */
+#results-tagline {
+  margin-top: 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: rgba(255,255,255,0.95);
+  max-width: 700px;
+}
+
+/* Scoreboard centered */
 #scoreboard-list {
   list-style: none;
   padding: 0;
-  margin-top: 1rem;
+  margin: 0;
   width: min(520px, 92vw);
 }
 
 #scoreboard-list li {
-  background: rgba(0,0,0,0.08);
-  border-radius: 14px;
-  padding: 0.9rem 1.1rem;
-  margin: 0.6rem 0;
   display: flex;
   justify-content: space-between;
-  font-weight: 800;
-}
-
-/* Winner row styling */
-.winner-row {
-  position: relative;
-  border: 2px solid rgba(255, 196, 0, 0.6);
-  background: rgba(255, 196, 0, 0.18);
-}
-
-/* The emoji itself bounces */
-.fireworks {
-  display: inline-block;
-  margin-left: 10px;
-  transform-origin: center;
-  animation: fw-bounce 0.9s ease-in-out infinite;
-}
-
-/* Firework “spark” bursts around the emoji (no extra HTML needed) */
-.fireworks::before,
-.fireworks::after {
-  content: "";
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Spark positions + animation */
-.fireworks::before {
-  left: -8px;
-  top: -6px;
-  box-shadow:
-    18px 0 0 rgba(255, 0, 128, 0.95),
-    10px -16px 0 rgba(0, 180, 255, 0.95),
-    24px -14px 0 rgba(255, 200, 0, 0.95),
-    28px 6px 0 rgba(120, 255, 80, 0.95),
-    8px 12px 0 rgba(255, 120, 0, 0.95);
-  animation: fw-burst 1.2s ease-out infinite;
-}
-
-.fireworks::after {
-  left: 6px;
-  top: 6px;
-  box-shadow:
-    -10px -12px 0 rgba(255, 0, 128, 0.95),
-    -20px -2px 0 rgba(0, 180, 255, 0.95),
-    -14px 12px 0 rgba(255, 200, 0, 0.95),
-    6px -20px 0 rgba(120, 255, 80, 0.95),
-    16px 16px 0 rgba(255, 120, 0, 0.95);
-  animation: fw-burst 1.2s ease-out infinite 0.25s;
-}
-
-/* Animations */
-@keyframes fw-bounce {
-  0%, 100% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-3px) scale(1.05); }
-}
-
-@keyframes fw-burst {
-  0% { opacity: 0; transform: scale(0.2); }
-  20% { opacity: 1; transform: scale(1); }
-  60% { opacity: 0.9; transform: scale(1.15); }
-  100% { opacity: 0; transform: scale(1.35); }
+  align-items: center;
+  margin: 0.55rem 0;
+  padding: 0.9rem 1.1rem;
+  border-radius: 16px;
+  background: rgba(255,255,255,0.18);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  color: #fff;
+  font-weight: 700;
 }
 
 /* ================================
@@ -833,6 +778,7 @@ body.results-phase {
 @keyframes fadeBanner {
   to { opacity: 1; }
 }
+
 
 
 
