@@ -123,27 +123,24 @@
   <button id="next-target-btn" class="vibrant-btn hidden">
   Next Target →
 </button>
+  <button id="reveal-results-btn" class="vibrant-btn hidden">
+  Reveal Results 🎆
+</button>
 </section>
 
  
   <!-- 🏆 SCOREBOARD -->
-  <section id="scoreboardPhase" class="page">
-    <div class="container">
-    <h2>Scoreboard 🏆</h2>
-    <p class="scene-tagline">“Bragging rights loading... please wait 🤓”</p>
-    <div id="scoreboard"></div>
-    <button id="revealWinnerBtn" class="vibrant-btn hidden">Reveal Winner 👑</button>
-    </div>
-  </section>
+  <section id="results" class="page hidden">
+  <div class="banner" id="results-banner">🏆 Friendship Audit: The Receipts Are In!</div>
+  <div class="tagline" id="results-tagline">Some of you guessed with confidence… and absolutely no accuracy 😭</div>
 
-  <!-- 🎉 REVEAL PHASE -->
-  <section id="revealPhase" class="page">
-    <div class="container">
-    <h2>The Final Reveal 🎉</h2>
-    <p class="scene-tagline">“Only one can reign supreme…”</p>
-    <div id="revealPhaseContainer"></div>
-    </div>
-  </section>
+  <div id="scoreboard-wrap">
+    <h2 style="color:#111;margin-top:2rem;">Scoreboard</h2>
+    <ul id="scoreboard-list"></ul>
+  </div>
+</section>
+
+
 
   <!-- ✅ Firebase SDKs -->
   <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -154,6 +151,7 @@
   <script defer src="script.js"></script>
 </body>
 </html>
+
 
 
 
