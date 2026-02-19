@@ -170,6 +170,22 @@ document.addEventListener("DOMContentLoaded", () => {
   await gameRef.child(`players/${playerId}/ready`).set(true);
   $("submit-answers-btn").classList.add("hidden");
   });
+  
+$("reveal-results-btn")?.addEventListener("click", async () => {
+  if (!isHost || !gameRef) return;
+
+  // Get the latest room snapshot so scoring is accurate
+  const snap = await gameRef.once("value");
+  const data = snap.val();
+  if (!data) return;
+
+  const scores = calculateScores(data);
+
+  // Save scores to Firebase + move everyone to results phase
+  await gameRef.update({
+    scores,
+    phase: "results"
+  });
 });
 
 // ---------- Page Switching ----------
@@ -399,17 +415,33 @@ if (phase === "guessing") {
 
   const targetPlayer = targetOrder[currentIndex];
 
-  const doneMap = data.guessDone?.[targetPlayer] || {};
+ // Host-only Reveal Results button when LAST target round is finished
+const revealBtn = $("reveal-results-btn");
+const nextBtn = $("next-target-btn");
+
+if (revealBtn) revealBtn.classList.add("hidden"); // default hidden
+
+// Determine if everyone except target is done for THIS round
+const doneMap = data.guessDone?.[targetPlayer] || {};
 const allNonTargetDone = Object.keys(players)
   .filter(name => name !== targetPlayer)
   .every(name => doneMap[name] === true);
 
-const nextBtn = $("next-target-btn");
-if (nextBtn) {
-  nextBtn.classList.toggle("hidden", !isHost);
-  nextBtn.disabled = !allNonTargetDone; // button greys out until ready
-  nextBtn.style.opacity = allNonTargetDone ? "1" : "0.5";
-  nextBtn.style.cursor = allNonTargetDone ? "pointer" : "not-allowed";
+const isLastTarget = (currentIndex === (targetOrder.length - 1));
+
+if (isHost) {
+  // If last target is finished → show Reveal button, hide Next
+  if (isLastTarget && allNonTargetDone) {
+    if (revealBtn) revealBtn.classList.remove("hidden");
+    if (nextBtn) nextBtn.classList.add("hidden");
+  } else {
+    // otherwise show Next (your existing logic)
+    if (nextBtn) nextBtn.classList.remove("hidden");
+  }
+} else {
+  // non-hosts never see these buttons
+  if (revealBtn) revealBtn.classList.add("hidden");
+  if (nextBtn) nextBtn.classList.add("hidden");
 }
 
   // Render the guessing UI for this round
@@ -444,16 +476,24 @@ function renderQuestion() {
     btn.className = "answer-btn";
     btn.textContent = option;
 
-    btn.addEventListener("click", () => {
-      playerAnswers[currentQuestionIndex] = option;
-      currentQuestionIndex++;
+    btn.addEventListener("click", async () => {
+  // save locally
+  playerAnswers[currentQuestionIndex] = option;
 
-      if (currentQuestionIndex < questions.length) {
-        renderQuestion();
-      } else {
-        handleAllQuestionsAnswered();
-      }
-    });
+  // ✅ save to Firebase so guessing/results can score it
+  if (gameRef && playerId) {
+    await gameRef.child(`players/${playerId}/answers/${String(currentQuestionIndex)}`).set(option);
+  }
+
+  currentQuestionIndex++;
+
+  if (currentQuestionIndex < questions.length) {
+    renderQuestion();
+  } else {
+    handleAllQuestionsAnswered();
+  }
+});
+
 
     answersEl.appendChild(btn);
   });
@@ -634,6 +674,28 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+
+
+  //RESULTS PHASE//
+  if (phase === "results") {
+  transitionToPhase("results");
+
+  const scores = data.scores || calculateScores(data);
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const winnerName = sorted[0]?.[0];
+
+  const listEl = $("scoreboard-list");
+  if (listEl) {
+    listEl.innerHTML = sorted.map(([name, score], idx) => {
+      const crown = (name === winnerName) ? " 🎆" : "";
+      return `<li><span>${idx + 1}. ${name}${crown}</span><span>${score}</span></li>`;
+    }).join("");
+  }
+
+  return;
+}
+
   
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
@@ -645,7 +707,44 @@ document.addEventListener("click", e => {
   }
 });
 
+function calculateScores(data) {
+  const players = data.players || {};
+  const playerNames = Object.keys(players);
+
+  // init scores
+  const scores = {};
+  playerNames.forEach(name => (scores[name] = 0));
+
+  const targetOrder = data.targetOrder || playerNames.slice().sort();
+
+  for (const target of targetOrder) {
+    const targetAnswers = players[target]?.answers || {};
+
+    for (const guesser of playerNames) {
+      if (guesser === target) continue; // target doesn’t guess own answers
+
+      for (let i = 0; i < questions.length; i++) {
+        const actual =
+          targetAnswers[i] ?? targetAnswers[String(i)];
+
+        const guess =
+          data.guesses?.[target]?.[guesser]?.[i] ??
+          data.guesses?.[target]?.[guesser]?.[String(i)];
+
+        // Only score if both exist
+        if (actual === undefined || guess === undefined) continue;
+
+        if (guess === actual) scores[guesser] += 1;
+        else scores[guesser] -= 1;
+      }
+    }
+  }
+
+  return scores;
+}
+  
 console.log("✅ Game script ready!");
+
 
 
 
