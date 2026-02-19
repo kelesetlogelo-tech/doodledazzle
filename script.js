@@ -52,7 +52,7 @@ const questions = [
   { 
     text: "If I were a bedtime excuse, I'd be....", 
     options: ["I need water", "My closet has eyes", "I can't go to sleep yet; someone is wrong on the internet and they need to know it", "There's a spider in my room", "One more episode", "I can't sleep; I have to remember a criney thing I did in 1999", "Just one more scroll.... okay, maybe fifty"] 
-  }
+  },
   { 
     text: "If I were a villain, I'd be....", 
     options: ["The one who steals the hero's chargers and leaves them with 2% battery", "The villain who just wants everyone to be quiet so she can nap", "A mosquito in your room at night", "The one who reveals their entire plan because they finally have someone to talk to"] 
@@ -754,5 +754,6 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
