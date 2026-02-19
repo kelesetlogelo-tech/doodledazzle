@@ -764,7 +764,7 @@ function escapeHtml(str) {
         if (actual === undefined || guess === undefined) continue;
 
         if (guess === actual) scores[guesser] += 1;
-        else scores[guesser] -= 1;
+        else scores[guesser] = 0;
       }
     }
   }
@@ -784,6 +784,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
