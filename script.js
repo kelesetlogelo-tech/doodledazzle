@@ -299,28 +299,55 @@ function updateRoomUI(data, code) {
   const readyCount = Object.values(players).filter(p => p.ready).length;
   const allReady = numPlayers === total && readyCount === total;
 
-  // ------------------------
-  // GUESSING INTRO (MUST BE FIRST)
-  // ------------------------
-  if (phase === "guessing-intro") {
-    console.log("🎬 Showing guessing intro");
+// ------------------------
+// GUESSING INTRO (MUST BE FIRST)
+// ------------------------
+if (phase === "guessing-intro") {
+  console.log("🎬 Showing guessing intro");
 
-    transitionToPhase("guessing-intro"); // hides all other pages
+  transitionToPhase("guessing-intro"); // hides all other pages
 
-    const countdownEl = $("guess-intro-countdown");
-    let secondsLeft = 10;
+  const countdownEl = $("guess-intro-countdown");
+  let secondsLeft = 10;
 
-  // Show starting number
+  // Show starting number immediately
   if (countdownEl) countdownEl.textContent = secondsLeft;
 
-    if (isHost && !window._guessIntroTimerStarted) {
-      window._guessIntroTimerStarted = true;
+  // Only host starts the timer (everyone else just displays it)
+  if (isHost && !window._guessIntroTimerStarted) {
+    window._guessIntroTimerStarted = true;
 
-      const interval = set 
-    }
+    // Clear any old interval if it exists
+    if (window._guessIntroInterval) clearInterval(window._guessIntroInterval);
 
-    return;
+    window._guessIntroInterval = setInterval(() => {
+      secondsLeft--;
+
+      if (countdownEl) countdownEl.textContent = secondsLeft;
+
+      if (secondsLeft <= 0) {
+        clearInterval(window._guessIntroInterval);
+        window._guessIntroInterval = null;
+      }
+    }, 1000);
+
+    setTimeout(() => {
+      // move everyone into guessing
+      gameRef.child("phase").set("guessing");
+
+      // reset guard for next time
+      window._guessIntroTimerStarted = false;
+
+      // safety cleanup
+      if (window._guessIntroInterval) {
+        clearInterval(window._guessIntroInterval);
+        window._guessIntroInterval = null;
+      }
+    }, 10000);
   }
+
+  return;
+}
 
   // ------------------------
   // WAITING TO GUESS
@@ -757,6 +784,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
