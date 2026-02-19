@@ -307,13 +307,16 @@ function updateRoomUI(data, code) {
 
     transitionToPhase("guessing-intro"); // hides all other pages
 
+    const countdownEl = $("guess-intro-countdown");
+    let secondsLeft = 10;
+
+  // Show starting number
+  if (countdownEl) countdownEl.textContent = secondsLeft;
+
     if (isHost && !window._guessIntroTimerStarted) {
       window._guessIntroTimerStarted = true;
 
-      setTimeout(() => {
-        gameRef.child("phase").set("guessing");
-        window._guessIntroTimerStarted = false;
-      }, 10000);
+      const interval = set 
     }
 
     return;
@@ -754,6 +757,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
