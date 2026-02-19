@@ -188,6 +188,8 @@ $("reveal-results-btn")?.addEventListener("click", async () => {
   });
 });
 
+});  
+
 // ---------- Page Switching ----------
 function transitionToPhase(phaseId) {
   const allSections = Array.from(document.querySelectorAll("section.page"));
@@ -449,7 +451,37 @@ if (isHost) {
 
   return;
 }
-  
+
+    // ------------------------
+  // RESULTS
+  // ------------------------
+  if (phase === "results") {
+    transitionToPhase("results");
+
+    const scores = data.scores || calculateScores(data);
+    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+    const winnerName = sorted[0]?.[0];
+
+    const listEl = $("scoreboard-list");
+    if (listEl) {
+      listEl.innerHTML = sorted.map(([name, score], idx) => {
+        const isWinner = name === winnerName;
+
+        return `
+          <li class="${isWinner ? "winner-row" : ""}">
+            <span class="name">
+              ${idx + 1}. ${name}
+              ${isWinner ? `<span class="fireworks" aria-hidden="true">🎆</span>` : ""}
+            </span>
+            <span class="score">${score}</span>
+          </li>
+        `;
+      }).join("");
+    }
+
+    return;
+  }
+
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -675,27 +707,6 @@ function escapeHtml(str) {
 }
 
 
-  //RESULTS PHASE//
-  if (phase === "results") {
-  transitionToPhase("results");
-
-  const scores = data.scores || calculateScores(data);
-
-  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-  const winnerName = sorted[0]?.[0];
-
-  const listEl = $("scoreboard-list");
-  if (listEl) {
-    listEl.innerHTML = sorted.map(([name, score], idx) => {
-      const crown = (name === winnerName) ? " 🎆" : "";
-      return `<li><span>${idx + 1}. ${name}${crown}</span><span>${score}</span></li>`;
-    }).join("");
-  }
-
-  return;
-}
-
-  
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
   if (e.target.id === "room-code-display-game") {
@@ -743,6 +754,7 @@ function calculateScores(data) {
 }
 
 console.log("✅ Game script ready!");
+
 
 
 
