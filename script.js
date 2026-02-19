@@ -39,11 +39,11 @@ let playerAnswers = [];
 const questions = [
   { 
     text: "If I were a sound effect, I'd be....", 
-    options: ["The vuvuzela at the Soccer World Cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a slient room", "Evil laugh", "That sneeze that's accompanied by that sneeky fart", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
+    options: ["The final whistle at the soccer world cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a slient room", "Evil laugh", "That sneeze that's accompanied by that sneeky fart", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
   },
   { 
     text: "If I were a weather forecast, I'd be....", 
-    options: ["100% chill", "Partly cloudy witha chance of chaos", "A light breeze that somehow ruins everyone's hair", "90% chance of showers, followed by a sudden unexplainable heatwave", "Sudden torando of opinions" , "A localized hurricane specifically targeting people who talk during movies", "Scorching heat with a 100% chance of being being 'too much' for you"] 
+    options: ["100% chill", "Partly cloudy with a chance of chaos", "A light breeze that somehow ruins everyone's hair", "90% chance of showers, followed by a sudden unexplainable heatwave", "Sudden torando of opinions" , "A localized hurricane specifically targeting people who talk during movies", "Scorching heat with a 100% chance of being being 'too much' for you"] 
   },
   { 
     text: "If I were a breakfast cereal, I'd be....", 
@@ -784,6 +784,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
