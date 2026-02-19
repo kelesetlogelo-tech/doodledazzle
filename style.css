@@ -347,48 +347,6 @@ body.qa-phase {
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
-/* ================================
-   UNIVERSAL BANNER (same as Q&A)
-   ================================ */
-
-/* Reuse the Q&A banner style for ALL phase banners */
-#qa-banner,
-#waiting-guess-banner,
-#guessing-intro-banner {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 1.2rem;
-  background: #7c3aed;      /* default purple (override per phase below if you want) */
-  color: #fff;
-  font-size: 1.3rem;
-  font-weight: 700;
-  text-align: center;
-  z-index: 100;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-}
-
-/* Universal content push-down so banner never overlaps */
-#qa-content,
-#waiting-guess-content,
-#guessing-intro-content {
-  margin-top: 6.5rem; /* adjust if your banner feels taller/shorter */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-/* Same styling, different colors per screen (optional) */
-#waiting-guess-banner {
-  background: #2563eb; /* blue */
-}
-
-#guessing-intro-banner {
-  background: #f59e0b; /* yellow/orange */
-}
-
 
 /* ================================
    WAITING TO GUESS PHASE
@@ -778,6 +736,49 @@ body.results-phase {
 @keyframes fadeBanner {
   to { opacity: 1; }
 }
+
+/* ================================
+   UNIVERSAL BANNER (same as Q&A)
+   ================================ */
+
+/* Reuse the Q&A banner style for ALL phase banners */
+#qa-banner,
+#waiting-guess-banner,
+#guessing-intro-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.2rem;
+  background: #7c3aed;      /* default purple (override per phase below if you want) */
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-align: center;
+  z-index: 100;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Universal content push-down so banner never overlaps */
+#qa-content,
+#waiting-guess-content,
+#guessing-intro-content {
+  margin-top: 6.5rem; /* adjust if your banner feels taller/shorter */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Same styling, different colors per screen (optional) */
+#waiting-guess-banner {
+  background: #2563eb; /* blue */
+}
+
+#guessing-intro-banner {
+  background: #f59e0b; /* yellow/orange */
+}
+
 
 
 
