@@ -706,18 +706,7 @@ function escapeHtml(str) {
     .replaceAll("'", "&#039;");
 }
 
-
-// ---------- Copy Room Code ----------
-document.addEventListener("click", e => {
-  if (e.target.id === "room-code-display-game") {
-    const code = e.target.textContent.trim();
-    navigator.clipboard.writeText(code);
-    e.target.textContent = "Copied!";
-    setTimeout(() => (e.target.textContent = code), 1000);
-  }
-});
-
-function calculateScores(data) {
+  function calculateScores(data) {
   const players = data.players || {};
   const playerNames = Object.keys(players);
 
@@ -753,24 +742,15 @@ function calculateScores(data) {
   return scores;
 }
 
+// ---------- Copy Room Code ----------
+document.addEventListener("click", e => {
+  if (e.target.id === "room-code-display-game") {
+    const code = e.target.textContent.trim();
+    navigator.clipboard.writeText(code);
+    e.target.textContent = "Copied!";
+    setTimeout(() => (e.target.textContent = code), 1000);
+  }
+});
+
+
 console.log("✅ Game script ready!");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
