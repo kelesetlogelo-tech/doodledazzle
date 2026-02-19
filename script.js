@@ -51,7 +51,7 @@ const questions = [
   },
   { 
     text: "If I were a bedtime excuse, I'd be....", 
-    options: ["I need water", "My closet has eyes", "I can't go to sleep yet; someone is wrong on the internet and they need to know it", "There's a spider in my room", "One more episode", "I can't sleep; I have to remember a criney thing I did in 1999", "Just one more scroll.... okay, maybe fifty"] 
+    options: ["I need water", "My closet has eyes", "I can't go to sleep yet; someone is wrong on the internet and they need to know it", "There's a spider in my room", "One more episode", "I can't sleep; I have to remember a cringey thing I did in 1999", "Just one more scroll.... okay, maybe fifty"] 
   },
   { 
     text: "If I were a villain, I'd be....", 
@@ -784,6 +784,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
