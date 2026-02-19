@@ -740,8 +740,8 @@ function escapeHtml(str) {
   }
 
   return scores;
+ }
 }
-
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
   if (e.target.id === "room-code-display-game") {
@@ -754,3 +754,4 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
