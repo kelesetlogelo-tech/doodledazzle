@@ -38,44 +38,44 @@ let playerAnswers = [];
 // ---------- Questions ----------
 const questions = [
   { 
-    text: "If I were a sound effect, I'd be:", 
-    options: ["Ka-ching!", "Dramatic gasp", "Boing!", "Evil laugh"] 
+    text: "If I were a sound effect, I'd be....", 
+    options: ["The vuvuzela at the Soccer World Cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a slient room", "Evil laugh", "That sneeze that's accompanied by that sneeky fart", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
   },
   { 
-    text: "If I were a weather forecast, I'd be:", 
-    options: ["100% chill", "Chance of chaos", "Heatwave vibes", "Sudden drama"] 
+    text: "If I were a weather forecast, I'd be....", 
+    options: ["100% chill", "Partly cloudy witha chance of chaos", "A light breeze that somehow ruins everyone's hair", "90% chance of showers, followed by a sudden unexplainable heatwave", "Sudden torando of opinions" , "A localized hurricane specifically targeting people who talk during movies", "Scorching heat with a 100% chance of being being 'too much' for you"] 
   },
   { 
-    text: "If I were a breakfast cereal, I'd be:", 
-    options: ["Jungle Oats", "WeetBix", "Rice Krispies", "That weird healthy one"] 
+    text: "If I were a breakfast cereal, I'd be....", 
+    options: ["Honey Nut 'Mind Your Business'", "The generic brand in the giant bag:unpretentiuos and surprisingly sweet!", "Rice Krispies", "That weird healthy one no-one eats"] 
   },
   { 
-    text: "If I were a bedtime excuse, I'd be:", 
-    options: ["I need water", "There's a spider in my room", "One more episode", "I'm not tired", "I can't sleep without Pillow"] 
+    text: "If I were a bedtime excuse, I'd be....", 
+    options: ["I need water", "My closet has eyes", "I can't go to sleep yet; someone is wrong on the internet and they need to know it", "There's a spider in my room", "One more episode", "I can't sleep; I have to remember a criney thing I did in 1999", "Just one more scroll.... okay, maybe fifty"] 
+  }
+  { 
+    text: "If I were a villain, I'd be....", 
+    options: ["The one who steals the hero's chargers and leaves them with 2% battery", "The villain who just wants everyone to be quiet so she can nap", "A mosquito in your room at night", "The one who reveals their entire plan because they finally have someone to talk to"] 
+  },
+  {
+    text: "If I were a kitchen appliance, I'd be....", 
+    options: ["A fridge that judges your snack choices", " An espresso machine that refuses to work if you use the wrong beans", "An air-fryer: loud, high-maintenance, but currently everyone's favourite", "A microwave that screams when it's done", "That fancy zester you bought three years ago and have used exactly once", "A toaster that only pops when no-one's looking ", "A blender on high speed with no lid"] 
   },
   { 
-    text: "If I were a villain, I'd be:", 
-    options: ["Grinch", "Thanos", "Mosquito", "Darth Vader"] 
+    text: "If I were a TikTok dance challenge, I'd be....", 
+    options: ["The one where everyone looks like they're trying to swat a wasp", "That Zep dance that is not make sure", "Too fast for you to learn, but easy for me to judge", "The 'I didn't realise I was being recorded", "Trending for six hours befre being replaced by a talking dog" , "Mostly just standing there while the text bubbles do the work"] 
   },
   { 
-    text: "If I were a kitchen appliance:", 
-    options: ["Judgy fridge", "Loud microwave", "Toaster of betrayal", "Blender of chaos"] 
+    text: "If I were a text message, I'd be....", 
+    options: ["A 3-hour late 'LOL'", "A mysterious 'K.' with no context", "A group chat gif spammer", "A typo-ridden voice to text disaster", "We need to talk (about what we're having for dinner)", "A 'read' receipt with no follow-up for three business days", "The 'Typing....' bubbles that last for twenty minutes and then disappear forever"] 
   },
   { 
-    text: "If I were a dance move:", 
-    options: ["Awkward shuffle", "Kwasakwasa", "Invisible groove", "Knee regret"] 
+    text: "If I were a warning label,I'd be....", 
+   options: ["Caution: May spontaneously break into song", "Warning: Will talk your ear off about random facts", "Dangerous opinions", "Fragile: Do not shake or provide constructive criticism", "Contents under pressure. Keep away from direct sunlight and early morning meetings", "For external use only. Do not engage without caffeine", "May contain traces of impulsive decisions", "Do not approach without a compliment and a good cup of coffee"] 
   },
   { 
-    text: "If I were a text message:", 
-    options: ["Late LOL", "K.", "Gif spam", "Voice note typo"] 
-  },
-  { 
-    text: "If I were a warning label:", 
-   options: ["May sing", "May overshare", "Dangerous opinions", "Unfiltered thoughts"] 
-  },
-  { 
-    text: "If I were a chair:", 
-    options: ["Creaky antique", "Snack throne", "Finger trap", "Royal regret", "The one that makes a fart sound when you sit"] 
+    text: "If I were a chair, I'd be....", 
+    options: ["A creaky antique that screams when you sit", "A throne made of regrets and snack crumbs", "One of those folding chairs that attack your fingers", "That sofa at Phala Phala", "The one that makes a fart sound when you sit" , "A throne. Next question...", "A beanbag: impossible to get out of once you've committed" , "An electric chair", "The swivel chair with one squeaky wheel that follows you everywhere", "A Victorian armchair: looks sophisticated, but incredibly uncomforatble for long periods"] 
   }
 ];
 
@@ -754,4 +754,5 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
