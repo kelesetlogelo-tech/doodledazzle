@@ -448,9 +448,8 @@ if (isHost) {
   renderGuessingRound(targetPlayer, data, players);
 
   return;
-  }
-}  
-
+}
+  
 // ---------- Q&A ----------
 function startQA() {
   window.qaStarted = true;
@@ -742,8 +741,9 @@ function calculateScores(data) {
 
   return scores;
 }
-  
+
 console.log("✅ Game script ready!");
+
 
 
 
