@@ -682,6 +682,71 @@ body.results-phase {
   font-weight: 800;
 }
 
+/* Winner row styling */
+.winner-row {
+  position: relative;
+  border: 2px solid rgba(255, 196, 0, 0.6);
+  background: rgba(255, 196, 0, 0.18);
+}
+
+/* The emoji itself bounces */
+.fireworks {
+  display: inline-block;
+  margin-left: 10px;
+  transform-origin: center;
+  animation: fw-bounce 0.9s ease-in-out infinite;
+}
+
+/* Firework “spark” bursts around the emoji (no extra HTML needed) */
+.fireworks::before,
+.fireworks::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Spark positions + animation */
+.fireworks::before {
+  left: -8px;
+  top: -6px;
+  box-shadow:
+    18px 0 0 rgba(255, 0, 128, 0.95),
+    10px -16px 0 rgba(0, 180, 255, 0.95),
+    24px -14px 0 rgba(255, 200, 0, 0.95),
+    28px 6px 0 rgba(120, 255, 80, 0.95),
+    8px 12px 0 rgba(255, 120, 0, 0.95);
+  animation: fw-burst 1.2s ease-out infinite;
+}
+
+.fireworks::after {
+  left: 6px;
+  top: 6px;
+  box-shadow:
+    -10px -12px 0 rgba(255, 0, 128, 0.95),
+    -20px -2px 0 rgba(0, 180, 255, 0.95),
+    -14px 12px 0 rgba(255, 200, 0, 0.95),
+    6px -20px 0 rgba(120, 255, 80, 0.95),
+    16px 16px 0 rgba(255, 120, 0, 0.95);
+  animation: fw-burst 1.2s ease-out infinite 0.25s;
+}
+
+/* Animations */
+@keyframes fw-bounce {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-3px) scale(1.05); }
+}
+
+@keyframes fw-burst {
+  0% { opacity: 0; transform: scale(0.2); }
+  20% { opacity: 1; transform: scale(1); }
+  60% { opacity: 0.9; transform: scale(1.15); }
+  100% { opacity: 0; transform: scale(1.35); }
+}
+
 
 
 
