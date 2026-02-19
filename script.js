@@ -501,7 +501,7 @@ if (isHost) {
           <li class="${isWinner ? "winner-row" : ""}">
             <span class="name">
               ${idx + 1}. ${name}
-              ${isWinner ? `<span class="fireworks" aria-hidden="true">🎆</span>` : ""}
+              ${isWinner ? `<span class="fireworks" aria-hidden="true"></span>` : ""}
             </span>
             <span class="score">${score}</span>
           </li>
@@ -784,6 +784,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
