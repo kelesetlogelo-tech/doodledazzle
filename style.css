@@ -395,6 +395,38 @@ body.waiting-to-guess-phase {
 }
 
 /* ================================
+   Q&A TILE SLIDE ANIMATION
+   ================================ */
+
+.qa-tile {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  padding: 22px 18px;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+}
+
+.qa-tile.slide-in {
+  animation: qaSlideIn 280ms ease-out both;
+}
+
+.qa-tile.slide-out {
+  animation: qaSlideOut 220ms ease-in both;
+}
+
+@keyframes qaSlideIn {
+  from { transform: translateX(28px); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes qaSlideOut {
+  from { transform: translateX(0); opacity: 1; }
+  to   { transform: translateX(-28px); opacity: 0; }
+}
+
+
+/* ================================
    Loading Dots Animation
    ================================ */
 
@@ -778,6 +810,7 @@ body.results-phase {
 #guessing-intro-banner {
   background: #f59e0b; /* yellow/orange */
 }
+
 
 
 
