@@ -17,6 +17,7 @@ let introTimerStarted = false;
 let guessingQuestionIndex = 0;
 let currentGuessTarget = null;
 let isSubmittingGuess = false;
+let isSubmittingQA = false;
 let lastRenderedGuessKey = null; // prevents duplicate tiles
 let lastTargetAdvanced = null;      // host-only guard
 let lastGuessDoneMarked = null;     // per player guard
@@ -116,7 +117,7 @@ async function handleAllQuestionsAnswered() {
 
 submitBtn.addEventListener("click", () => {
   submitBtn.style.display = "none";
-  transitionToWaitingRoomTwo();
+  transitionToPhase("waiting-to-guess");
 });
 
 /*************************************************
@@ -517,46 +518,95 @@ function startQA() {
   window.qaStarted = true;
   currentQuestionIndex = 0;      // ✅ RESET INDEX
   playerAnswers = [];
-  submitBtn.style.display = "none"; // ✅ HIDE SUBMIT BUTTON
+  isSubmittingQA = false;
+  
+  if (submitBtn) submitBtn.style.display = "none"; // ✅ HIDE SUBMIT BUTTON
   renderQuestion();
 }
 
 function renderQuestion() {
-  const q = questions[currentQuestionIndex]; // ✅ FIXED NAME
+  const q = questions[currentQuestionIndex];
 
+  // If no more questions, finish Q&A
   if (!q) {
-    console.warn("No question found at index", currentQuestionIndex);
+    console.log("✅ Q&A complete for", playerId);
+    handleAllQuestionsAnswered();
     return;
   }
 
-  questionTextEl.textContent = q.text;
-  answersEl.innerHTML = "";
+  // Make sure submit is hidden until end (you said submit only after Q10)
+  if (submitBtn) submitBtn.style.display = "none";
 
-  q.options.forEach(option => {
-    const btn = document.createElement("button");
-    btn.className = "answer-btn";
-    btn.textContent = option;
+  // Reset click guard
+  isSubmittingQA = false;
 
+  // Build ONE tile
+  const tileHTML = `
+    <div class="qa-tile slide-in" id="qa-tile">
+      <div class="guess-progress">Question ${currentQuestionIndex + 1} / ${questions.length}</div>
+      <div class="guess-q" style="margin-top:10px; font-weight:800; color:#000;">
+        ${escapeHtml(q.text)}
+      </div>
+
+      <div class="guess-options" style="margin-top:14px;">
+        ${q.options
+          .map(opt => `
+            <button class="guess-opt-btn" data-opt="${escapeHtml(opt)}">
+              ${escapeHtml(opt)}
+            </button>
+          `)
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  // Inject into your existing Q&A container
+  // (Your HTML already has #question-text and #answer-options, but we’ll render inside #answer-options as the tile holder)
+  if (!answersEl) {
+    console.error("🚨 Missing #answer-options element in HTML");
+    return;
+  }
+
+  // Keep questionTextEl for banner layout if you want, but we’re rendering the question inside tile now.
+  if (questionTextEl) questionTextEl.textContent = ""; 
+
+  answersEl.innerHTML = tileHTML;
+
+  const tile = document.getElementById("qa-tile");
+  const optionButtons = answersEl.querySelectorAll(".guess-opt-btn");
+
+  optionButtons.forEach(btn => {
     btn.addEventListener("click", async () => {
-  // save locally
-  playerAnswers[currentQuestionIndex] = option;
+      if (isSubmittingQA) return;
+      isSubmittingQA = true;
 
-  // ✅ save to Firebase so guessing/results can score it
-  if (gameRef && playerId) {
-    await gameRef.child(`players/${playerId}/answers/${String(currentQuestionIndex)}`).set(option);
-  }
+      const chosen = btn.getAttribute("data-opt");
 
-  currentQuestionIndex++;
+      try {
+        // Save locally
+        playerAnswers[currentQuestionIndex] = chosen;
 
-  if (currentQuestionIndex < questions.length) {
-    renderQuestion();
-  } else {
-    handleAllQuestionsAnswered();
-  }
-});
+        // Save to Firebase (IMPORTANT for guessing + results)
+        if (gameRef && playerId) {
+          await gameRef
+            .child(`players/${playerId}/answers/${String(currentQuestionIndex)}`)
+            .set(chosen);
+        }
 
+        // Slide out the tile
+        if (tile) tile.classList.add("slide-out");
 
-    answersEl.appendChild(btn);
+        // After slide-out, move to next question and slide in next tile
+        setTimeout(() => {
+          currentQuestionIndex++;
+          renderQuestion();
+        }, 240);
+
+      } catch (err) {
+        console.error("❌ Failed saving QA answer:", err);
+        isSubmittingQA = false;
+      }
+    });
   });
 }
 
@@ -784,6 +834,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
