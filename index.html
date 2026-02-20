@@ -34,27 +34,25 @@
   </section>
 
   <!-- 🕺 WAITING ROOM -->
- <section id="waiting" class="page waiting-room">
+<div class="phase-banner">Gather your tribe 🪶</div>
 
-  <header class="waiting-header">
-    <div id="waiting-banner">🪶 Gather your tribe</div>
-    <div class="waiting-tagline">
-      “Someone’s already side-eyeing the scoreboard.”
+<div class="phase-content">
+  <div class="phase-tagline">Someone's already side-eyeing the scoreboard 👀</div>
+
+  <div class="phase-tile">
+    <div id="room-code-display-game" class="pill">ABCDE</div>
+    <div class="copy-hint">Tap to copy</div>
+
+    <div id="players-count" class="phase-tagline" style="margin-top:1rem;">
+      Waiting on 2 players...
     </div>
-  </header>
+  </div>
 
-  <main class="waiting-main">
-    <div id="room-code-display-game" class="room-code-pill"></div>
-    <p id="players-count" class="players-count"></p>
+  <ul id="players-list" class="phase-list"></ul>
 
-    <ul id="players-list" class="players-list"></ul>
+  <button id="begin-game-btn" class="vibrant-btn hidden">Begin Game</button>
+</div>
 
-    <button id="begin-game-btn" class="vibrant-btn hidden">
-      Begin Game
-    </button>
-  </main>
-
-</section>
 
   <!-- 🎭 Q&A PHASE -->
   <section id="qa" class="page">
@@ -75,42 +73,35 @@
 </section>
 
   <!-- 🎬 GUESSING INTRO -->
-<section id="guessing-intro" class="page">
-  <body class="container">
-    <div id="guess-intro-banner">
-      Friendship Test: Prepare to Fail Spectacularly!
-    </div>
-  <div id="guess-intro-countdown">10</div>
+<div class="phase-banner">Friendship Test: Prepare to Fail Spectacularly!</div>
 
-    <p id="guess-intro-tagline" class="tagline">
-      Now's your chance to expose how well you really know them.
-    </p>
+<div class="phase-content">
+  <div class="phase-tagline">Now's your chance to expose how well you really know them</div>
+
+  <div class="phase-tile">
+    <div class="phase-subheading">Get ready…</div>
+    <div class="phase-tagline" style="margin-top:0.8rem;">
+      Starting in <span id="guess-intro-countdown">10</span>…
+    </div>
   </div>
-</section>
+</div>
 
    <!-- 🔮 PRE-GUESS PHASE -->
- <section id="waiting-to-guess" class="page">
+ <div class="phase-banner">Waiting to Guess...</div>
 
-  <div id="waiting-guess-banner">
-    Waiting to Guess...
+<div class="phase-content">
+  <div class="phase-subheading">Everyone's pretending they're ready — Nobody is!</div>
+  <div id="waiting-guess-tagline" class="phase-tagline loading-dots">
+    Sharpen your instincts: chaos is loading
   </div>
 
-  <div id="waiting-guess-content">
-    <h2 id="waiting-guess-subheading">
-      Everyone's pretending they're ready — Nobody is!
-    </h2>
+  <div id="waiting-on-count" class="phase-tagline" style="margin-top:0.5rem;">
+    Waiting on 2 players...
+  </div>
 
-      <p id="waiting-on-count"></p>
-    
-    <p id="waiting-guess-tagline">
-    Sharpen your instincts: chaos is loading
-    <span class="loading-dots"></span>
-  </p>
-  
-    <button id="begin-guessing-btn" class="vibrant-btn hidden">
-      Start Guessing
-    </button>
-  </section>
+  <button id="begin-guessing-btn" class="vibrant-btn hidden">Start Guessing</button>
+</div>
+
 
 <!-- Guessing Screen -->
 <section id="guessing" class="page">
@@ -127,15 +118,18 @@
 
  
   <!-- 🏆 SCOREBOARD -->
-  <section id="results" class="page hidden">
-  <div class="banner" id="results-banner">🏆 Brace Yourselves: The Receipts Are In!</div>
-  <div class="tagline" id="results-tagline">Some of you guessed with confidence… and absolutely no accuracy 😭</div>
+<div class="phase-banner">Final Scores: Who Actually Knows Their Friends? 😭</div>
 
-  <div id="scoreboard-wrap">
-    <ul id="scoreboard-list"></ul>
+<div class="phase-content">
+  <div class="phase-tagline">Some of these guesses were CRIMINAL. Here’s the damage:</div>
+
+  <div class="phase-tile">
+    <ul id="scoreboard-list" class="phase-list"></ul>
   </div>
-</section>
 
+  <!-- host-only button (optional if you use it) -->
+  <button id="reveal-results-btn" class="vibrant-btn hidden">Reveal Results</button>
+</div>
 
 
   <!-- ✅ Firebase SDKs -->
@@ -147,6 +141,7 @@
   <script defer src="script.js"></script>
 </body>
 </html>
+
 
 
 
