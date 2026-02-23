@@ -40,7 +40,7 @@ let playerAnswers = [];
 const questions = [
   { 
     text: "If I were a sound effect, I'd be....", 
-    options: ["The final whistle at the soccer world cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a slient room", "Evil laugh", "That sneeze that's accompanied by that sneeky fart", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
+    options: ["The final whistle at the soccer world cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a silent room", "Evil laugh", "That sneeze that's accompanied by that sneeky fart", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
   },
   { 
     text: "If I were a weather forecast, I'd be....", 
@@ -834,6 +834,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
