@@ -636,6 +636,14 @@ body.qa-phase {
   font-weight: 700;
 }
 
+/* Only show banners inside the ACTIVE page */
+.page .phase-banner {
+  display: none;
+}
+
+.page.is-active .phase-banner {
+  display: block;
+}
 
 
 
