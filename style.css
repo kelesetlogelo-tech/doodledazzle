@@ -343,7 +343,7 @@ body.qa-phase {
   font-size: 1.3rem;
   font-weight: 800;
   text-align: center;
-  z-index: 10;
+  z-index: 50;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
@@ -427,12 +427,12 @@ body.qa-phase {
 
 /* Optional: banner color per phase (keeps layout identical) */
 /* Banner colors per phase */
-#waiting .phase-banner { background: #ec4899; }
-#waiting-to-guess .phase-banner { background: #2563eb; }
-#qa #qa-banner, #qa .phase-banner { background: #7c3aed; }
-#guessing-intro .phase-banner { background: #0ea5e9; }
-#guessing .phase-banner { background: #f59e0b; }
-#results .phase-banner { background: #f97316; }
+#waiting.is-active .phase-banner { background: #ec4899; }
+#waiting-to-guess.is-active .phase-banner { background: #2563eb; }
+#qa.is-active #qa-banner, #qa .phase-banner { background: #7c3aed; }
+#guessing-intro.is-active .phase-banner { background: #0ea5e9; }
+#guessing.is-active .phase-banner { background: #f59e0b; }
+#results.is-active .phase-banner { background: #f97316; }
 /* ================================
    Q&A TILE SLIDE ANIMATION
    ================================ */
@@ -644,6 +644,7 @@ body.qa-phase {
 .page.is-active .phase-banner {
   display: block;
 }
+
 
 
 
