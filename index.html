@@ -34,6 +34,7 @@
   </section>
 
   <!-- 🕺 WAITING ROOM -->
+<section id="waiting-phase" class="page">  
 <div class="phase-banner">Gather your tribe 🪶</div>
 
 <div class="phase-content">
@@ -46,13 +47,12 @@
     <div id="players-count" class="phase-tagline" style="margin-top:1rem;">
       Waiting on 2 players...
     </div>
-  </div>
 
   <ul id="players-list" class="phase-list"></ul>
 
   <button id="begin-game-btn" class="vibrant-btn hidden">Begin Game</button>
 </div>
-
+</section>
 
   <!-- 🎭 Q&A PHASE -->
   <section id="qa" class="page">
@@ -73,6 +73,7 @@
 </section>
 
   <!-- 🎬 GUESSING INTRO -->
+ <section id="guess-intro" class="page"> 
 <div class="phase-banner">Friendship Test: Prepare to Fail Spectacularly!</div>
 
 <div class="phase-content">
@@ -84,9 +85,10 @@
       Starting in <span id="guess-intro-countdown">10</span>…
     </div>
   </div>
-</div>
+ </section>
 
    <!-- 🔮 PRE-GUESS PHASE -->
+ <section id="waiting-to-guess" class="page"
  <div class="phase-banner">Waiting to Guess...</div>
 
 <div class="phase-content">
@@ -101,7 +103,7 @@
 
   <button id="begin-guessing-btn" class="vibrant-btn hidden">Start Guessing</button>
 </div>
-
+</section>
 
 <!-- Guessing Screen -->
 <section id="guessing" class="page">
@@ -118,6 +120,7 @@
 
  
   <!-- 🏆 SCOREBOARD -->
+<section id="results-phase" class="page"  
 <div class="phase-banner">Final Scores: Who Actually Knows Their Friends? 😭</div>
 
 <div class="phase-content">
@@ -130,6 +133,7 @@
   <!-- host-only button (optional if you use it) -->
   <button id="reveal-results-btn" class="vibrant-btn hidden">Reveal Results</button>
 </div>
+</section> 
 
 
   <!-- ✅ Firebase SDKs -->
@@ -141,6 +145,7 @@
   <script defer src="script.js"></script>
 </body>
 </html>
+
 
 
 
