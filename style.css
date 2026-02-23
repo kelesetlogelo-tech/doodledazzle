@@ -202,7 +202,7 @@ body.landing-phase {
 }
 
 body.waiting-phase {
-  background: linear-gradient(135deg, #ffd6e7, #ffe9f2);
+  background: linear-gradient(135deg, #dbeafe, #ffe9f2);
 }
 
 body.waiting-to-guess-phase {
@@ -428,7 +428,7 @@ body.qa-phase {
 /* Optional: banner color per phase (keeps layout identical) */
 /* Banner colors per phase */
 #waiting.is-active .phase-banner { background: #ec4899; }
-#waiting-to-guess.is-active .phase-banner { background: #2563eb; }
+#waiting-to-guess.is-active .phase-banner { background: #dbeafe; }
 #qa.is-active #qa-banner, #qa .phase-banner { background: #7c3aed; }
 #guessing-intro.is-active .phase-banner { background: #0ea5e9; }
 #guessing.is-active .phase-banner { background: #f59e0b; }
@@ -644,6 +644,7 @@ body.qa-phase {
 .page.is-active .phase-banner {
   display: block;
 }
+
 
 
 
