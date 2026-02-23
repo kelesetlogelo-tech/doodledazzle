@@ -15,31 +15,27 @@ html, body {
 
 /* ===== PAGE VISIBILITY SYSTEM (single source of truth) ===== */
 .page {
-  display: none;              /* hidden by default */
+  display: none;                 /* hidden by default */
   opacity: 0;
   transform: translateY(10px);
   transition: opacity 0.35s ease, transform 0.35s ease;
+  height: 100vh;
+  padding: 2rem;
+  position: relative;            /* IMPORTANT: anchors banner inside the page */
+  overflow: hidden;
   text-align: center;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  padding: 2rem;
 }
 
 .page.is-active {
-  display: flex;              /* ONLY the active page is displayed */
+  display: flex;
   opacity: 1;
   transform: translateY(0);
 }
 
-
-
-.container {
-  max-width: 400px;
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-}
+/* If you still use .hidden in JS, keep it */
+.hidden { display: none !important; }
 
 /* ===== TYPOGRAPHY ===== */
 h1 {
@@ -201,45 +197,32 @@ footer {
   text-align: center;
 }
 
-/* ===== BACKGROUND PHASES (MUST MATCH script.js) ===== */
 body.landing-phase {
   background: linear-gradient(135deg, #ff00cc, #ffff00);
 }
 
 body.waiting-phase {
-  background: linear-gradient(135deg, #ff7e5f, #feb47b);
+  background: linear-gradient(135deg, #ffd6e7, #ffe9f2);
 }
 
-body.qaPhase-phase {
-  background: linear-gradient(135deg, #6a11cb, #2575fc);
+body.waiting-to-guess-phase {
+  background: linear-gradient(135deg, #dbeafe, #eef2ff);
+}
+
+body.qa-phase {
+  background: linear-gradient(135deg, #e9d5ff, #f3e8ff);
 }
 
 body.guessing-intro-phase {
-  background: rgba(255,255,0,0.75);
+  background: linear-gradient(135deg, #cfe8ff, #eaf4ff);
 }
 
-body.guessingPhase-phase {
-  background: linear-gradient(135deg, #f7971e, #ffd200);
+body.guessing-phase {
+  background: linear-gradient(135deg, #fff7b2, #ffe58f); /* pastel yellow */
 }
 
-body.scoreboardPhase-phase {
-  background: linear-gradient(135deg, #11998e, #38ef7d);
-}
-
-body.revealPhase-phase {
-  background: linear-gradient(135deg, #ff6a00, #ee0979);
-}
-
-.room-code-pill {
-  background: rgba(0,0,0,0.35);
-  border: 2px dashed #fff;
-  padding: 1rem 2rem;
-  border-radius: 999px;
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: 0.3em;
-  cursor: pointer;
-  margin-bottom: 0.3rem;
+body.results-phase {
+  background: linear-gradient(135deg, #ffecd2, #fcb69f); /* vibrant results */
 }
 
 .copy-hint {
@@ -348,36 +331,32 @@ body.qa-phase {
 }
 
 
-/* =========================================
-   SHARED PHASE LAYOUT SYSTEM (ALL SCREENS)
-   ========================================= */
-
-/* Every phase uses the same top banner */
-.phase-banner {
-  position: fixed;
+/* ===== SHARED BANNER STYLE (same look as QA banner) ===== */
+.phase-banner,
+#qa-banner {
+  position: absolute;            /* IMPORTANT: NOT fixed */
   top: 0;
   left: 0;
   width: 100%;
   padding: 1.2rem;
-  background: #7c3aed; /* default purple (override per phase if you want) */
   color: #fff;
   font-size: 1.3rem;
   font-weight: 800;
   text-align: center;
-  z-index: 50;
+  z-index: 10;
   box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* The “content area” starts below the banner */
-.phase-content {
+/* Content area starts below banner */
+.phase-content,
+#qa-content {
   width: 100%;
-  margin-top: 10rem;          /* your “10 lines below banner” feel */
+  margin-top: 10rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
-  padding: 0 1rem;
   gap: 1.2rem;
+  padding: 0 1rem;
 }
 
 /* A “tile/card” container – same look everywhere */
@@ -446,33 +425,14 @@ body.qa-phase {
   font-weight: 700;
 }
 
-/* =========================================
-   PHASE BACKGROUNDS (PASTEL, CONSISTENT)
-   ========================================= */
-
-body.waiting-phase {
-  background: linear-gradient(135deg, #ffd6e7, #ffe9f2);
-}
-
-body.waiting-to-guess-phase {
-  background: linear-gradient(135deg, #dbeafe, #eef2ff);
-}
-
-body.guessing-intro-phase {
-  background: linear-gradient(135deg, #cfe8ff, #eaf4ff);
-}
-
-body.results-phase {
-  background: linear-gradient(135deg, #ffecd2, #fcb69f); /* more vibrant */
-}
-
 /* Optional: banner color per phase (keeps layout identical) */
-#waiting .phase-banner { background: #ec4899; }            /* pink */
-#waiting-to-guess .phase-banner { background: #2563eb; }   /* blue */
-#guessing-intro .phase-banner { background: #0ea5e9; }     /* sky */
-#results .phase-banner { background: #f97316; }            /* orange */
-#qa .phase-banner { background: #7c3aed; }                 /* purple */
-
+/* Banner colors per phase */
+#waiting .phase-banner { background: #ec4899; }
+#waiting-to-guess .phase-banner { background: #2563eb; }
+#qa #qa-banner, #qa .phase-banner { background: #7c3aed; }
+#guessing-intro .phase-banner { background: #0ea5e9; }
+#guessing .phase-banner { background: #f59e0b; }
+#results .phase-banner { background: #f97316; }
 /* ================================
    Q&A TILE SLIDE ANIMATION
    ================================ */
@@ -529,11 +489,6 @@ body.results-phase {
   color: #1e3a8a;
 }
 
-
-
-/* ---- FINAL VISIBILITY OVERRIDE (put at the bottom) ---- */
-section.page { display: none !important; }
-section.page.is-active { display: flex !important; opacity: 1 !important; }
 
 /* Guessing tile + slide animation */
 .guess-tile {
@@ -680,6 +635,7 @@ section.page.is-active { display: flex !important; opacity: 1 !important; }
   color: #fff;
   font-weight: 700;
 }
+
 
 
 
