@@ -202,11 +202,11 @@ body.landing-phase {
 }
 
 body.waiting-phase {
-  background: linear-gradient(135deg, #adff2f, #ffe9f2);
+  background: linear-gradient(135deg, #adff2f, #228b22);
 }
 
 body.waiting-to-guess-phase {
-  background: linear-gradient(135deg, #dbeafe, #eef2ff);
+  background: linear-gradient(135deg, #ffe9f2, #ffa07a);
 }
 
 body.qa-phase {
@@ -644,6 +644,7 @@ body.qa-phase {
 .page.is-active .phase-banner {
   display: block;
 }
+
 
 
 
