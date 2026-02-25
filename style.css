@@ -646,6 +646,83 @@ body.qa-phase {
   display: block;
 }
 
+/* ================================
+   GUESSING PHASE – ALIGNMENT FIX
+   ================================ */
+
+/* pastel yellow background for guessing */
+body.guessing-phase {
+  background: linear-gradient(135deg, #fff7c2, #ffeaa6);
+}
+
+/* Make guessing page behave like a proper "banner + content" layout */
+#guessing.page.is-active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100vh;
+  padding: 0;              /* banner handles its own padding */
+}
+
+/* Target banner at TOP-CENTER (same style as QA banner) */
+#guessing .phase-banner,
+#guess-target-name {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1.2rem;
+  background: #f59e0b;     /* warm yellow/orange banner */
+  color: #111;
+  font-size: 1.35rem;
+  font-weight: 900;
+  text-align: center;
+  z-index: 60;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  margin: 0;
+}
+
+/* Everything below the banner starts lower */
+#guessing .phase-content,
+#guessing-content {
+  margin-top: 8.5rem;      /* "a few spaces" below banner */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.2rem;
+  padding: 0 1rem;
+}
+
+/* Tagline sits under banner */
+#guess-tagline {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111;
+  margin-top: 0.5rem;
+  max-width: 720px;
+}
+
+/* Card area centered */
+#guess-card {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Tile stays centered */
+.guess-tile {
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* Make sure text is visible */
+#guessing, #guessing * {
+  color: #111;
+}
 
 
 
