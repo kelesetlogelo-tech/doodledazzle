@@ -781,6 +781,47 @@ body.results-phase{
   color:#111 !important;
 }
 
+/* ================================
+   SUBTLE WINNER GLOW (RESULTS)
+   ================================ */
+
+#scoreboard-list li.winner {
+  background: rgba(255, 255, 255, 0.98);
+  border: 2px solid rgba(249, 115, 22, 0.45); /* soft orange outline */
+  box-shadow:
+    0 0 0 4px rgba(249, 115, 22, 0.12),
+    0 10px 22px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Gentle pulsing glow (very subtle) */
+@keyframes winnerGlow {
+  0% {
+    box-shadow:
+      0 0 0 4px rgba(249, 115, 22, 0.10),
+      0 10px 22px rgba(0, 0, 0, 0.12);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(249, 115, 22, 0.18),
+      0 10px 22px rgba(0, 0, 0, 0.12);
+  }
+  100% {
+    box-shadow:
+      0 0 0 4px rgba(249, 115, 22, 0.10),
+      0 10px 22px rgba(0, 0, 0, 0.12);
+  }
+}
+
+#scoreboard-list li.winner {
+  animation: winnerGlow 1.6s ease-in-out infinite;
+}
+
+/* Trophy stays clean + visible */
+#scoreboard-list li.winner .name::after {
+  content: " 🏆";
+  font-size: 1.1rem;
+}
 
 
 
