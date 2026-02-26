@@ -448,33 +448,44 @@ if (phase === "guessing") {
 
   const targetPlayer = targetOrder[currentIndex];
 
- // Host-only Reveal Results button when LAST target round is finished
-const revealBtn = $("reveal-results-btn");
+// --- Host-only Next Target button: ONLY when everyone (except target) is done ---
 const nextBtn = $("next-target-btn");
+const revealBtn = $("reveal-results-btn");
 
-if (revealBtn) revealBtn.classList.add("hidden"); // default hidden
+// default: hide both
+if (nextBtn) nextBtn.classList.add("hidden");
+if (revealBtn) revealBtn.classList.add("hidden");
 
-// Determine if everyone except target is done for THIS round
+// done map for THIS target
 const doneMap = data.guessDone?.[targetPlayer] || {};
+
+// everyone except target must be done
 const allNonTargetDone = Object.keys(players)
   .filter(name => name !== targetPlayer)
   .every(name => doneMap[name] === true);
 
-const isLastTarget = (currentIndex === (targetOrder.length - 1));
+const isLastTarget = (currentIndex === targetOrder.length - 1);
 
 if (isHost) {
-  // If last target is finished → show Reveal button, hide Next
-  if (isLastTarget && allNonTargetDone) {
-    if (revealBtn) revealBtn.classList.remove("hidden");
-    if (nextBtn) nextBtn.classList.add("hidden");
+  if (allNonTargetDone) {
+    // If last target finished -> show Reveal Results
+    if (isLastTarget) {
+      if (revealBtn) revealBtn.classList.remove("hidden");
+      if (nextBtn) nextBtn.classList.add("hidden");
+    } else {
+      // Otherwise show Next Target
+      if (nextBtn) nextBtn.classList.remove("hidden");
+      if (revealBtn) revealBtn.classList.add("hidden");
+    }
   } else {
-    // otherwise show Next (your existing logic)
-    if (nextBtn) nextBtn.classList.remove("hidden");
+    // Not everyone done yet -> keep hidden
+    if (nextBtn) nextBtn.classList.add("hidden");
+    if (revealBtn) revealBtn.classList.add("hidden");
   }
 } else {
-  // non-hosts never see these buttons
-  if (revealBtn) revealBtn.classList.add("hidden");
+  // Non-host never sees these buttons
   if (nextBtn) nextBtn.classList.add("hidden");
+  if (revealBtn) revealBtn.classList.add("hidden");
 }
 
   // Render the guessing UI for this round
@@ -838,6 +849,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
