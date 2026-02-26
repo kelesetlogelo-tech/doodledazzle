@@ -40,7 +40,7 @@ let playerAnswers = [];
 const questions = [
   { 
     text: "If I were a sound effect, I'd be....", 
-    options: ["The final whistle at the soccer world cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a silent room", "Evil laugh", "That sneeze that's accompanied by that sneeky fart", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
+    options: ["The final whistle at the soccer world cup!", "Dramatic gasp", "The sound of someone dropping a tray of silverware in a silent room", "Evil laugh", "A VW Golf GTI from 'Pimp My Ride'", "The 'Law & Order' Dun-Dun... Usually occuring right after I make a questionable life choice"] 
   },
   { 
     text: "If I were a weather forecast, I'd be....", 
@@ -484,34 +484,21 @@ if (isHost) {
 }
 
     // ------------------------
-  // RESULTS
-  // ------------------------
-  if (phase === "results") {
-    transitionToPhase("results");
+// RESULTS
+// ------------------------
+if (phase === "results") {
+  transitionToPhase("results");
 
-    const scores = data.scores || calculateScores(data);
-    const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-    const winnerName = sorted[0]?.[0];
+  const scores = data.scores || calculateScores(data);
+  renderScoreboard(scores);
 
-    const listEl = $("scoreboard-list");
-    if (listEl) {
-      listEl.innerHTML = sorted.map(([name, score], idx) => {
-        const isWinner = name === winnerName;
-
-        return `
-          <li class="${isWinner ? "winner-row" : ""}">
-            <span class="name">
-              ${idx + 1}. ${name}
-              ${isWinner ? `<span class="fireworks" aria-hidden="true"></span>` : ""}
-            </span>
-            <span class="score">${score}</span>
-          </li>
-        `;
-      }).join("");
-    }
-
-    return;
+  // Optional: host saves computed scores once (so everyone sees same ranking)
+  if (isHost && !data.scores) {
+    gameRef.child("scores").set(scores);
   }
+
+  return;
+}
 
 // ---------- Q&A ----------
 function startQA() {
@@ -785,42 +772,59 @@ function escapeHtml(str) {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
 }
+  
+  function renderScoreboard(scores) {
+  const listEl = $("scoreboard-list");
+  if (!listEl) {
+    console.error("🚨 Missing #scoreboard-list in Results HTML");
+    return;
+  }
+
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const winnerName = sorted[0]?.[0];
+
+  listEl.innerHTML = sorted.map(([name, score], idx) => {
+    const isWinner = name === winnerName;
+    return `
+      <li class="${isWinner ? "winner" : ""}">
+        <span class="name">${idx + 1}. ${name}</span>
+        <span class="score">${score}</span>
+      </li>
+    `;
+  }).join("");
+}
 
   function calculateScores(data) {
   const players = data.players || {};
   const playerNames = Object.keys(players);
 
-  // init scores
   const scores = {};
-  playerNames.forEach(name => (scores[name] = 0));
+  playerNames.forEach(n => (scores[n] = 0));
 
-  const targetOrder = data.targetOrder || playerNames.slice().sort();
+  const targetOrder = data.targetOrder || playerNames.slice().sort((a,b)=>a.localeCompare(b));
 
   for (const target of targetOrder) {
     const targetAnswers = players[target]?.answers || {};
 
     for (const guesser of playerNames) {
-      if (guesser === target) continue; // target doesn’t guess own answers
+      if (guesser === target) continue;
 
       for (let i = 0; i < questions.length; i++) {
-        const actual =
-          targetAnswers[i] ?? targetAnswers[String(i)];
-
+        const actual = targetAnswers[i] ?? targetAnswers[String(i)];
         const guess =
           data.guesses?.[target]?.[guesser]?.[i] ??
           data.guesses?.[target]?.[guesser]?.[String(i)];
 
-        // Only score if both exist
         if (actual === undefined || guess === undefined) continue;
 
         if (guess === actual) scores[guesser] += 1;
-        else scores[guesser] -= 0;
+        // else +0 (do nothing)
       }
     }
   }
 
   return scores;
- }
+}
 }
 // ---------- Copy Room Code ----------
 document.addEventListener("click", e => {
@@ -834,6 +838,7 @@ document.addEventListener("click", e => {
 
 
 console.log("✅ Game script ready!");
+
 
 
 
