@@ -741,13 +741,6 @@ body.results-phase{
   background: rgba(255,255,255,0.28);
 }
 
-/* Trophy next to winner */
-#scoreboard-list li.winner .name::after{
-  content: " 🏆";
-  font-size: 1.1rem;
-}
-
-
 
 /* ================================
    RESULTS SCOREBOARD TEXT FIX
@@ -822,6 +815,7 @@ body.results-phase{
   content: " 🏆";
   font-size: 1.1rem;
 }
+
 
 
 
