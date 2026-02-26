@@ -724,6 +724,51 @@ body.guessing-phase {
   color: #111;
 }
 
+/* RESULTS background (more vibrant) */
+body.results-phase{
+  background: linear-gradient(135deg, #ffb703, #fb8500);
+}
+
+/* scoreboard list items */
+#scoreboard-list li{
+  position: relative;
+  overflow: hidden;
+}
+
+/* Winner styling */
+#scoreboard-list li.winner{
+  border: 2px solid rgba(255,255,255,0.65);
+  background: rgba(255,255,255,0.28);
+}
+
+/* Trophy next to winner */
+#scoreboard-list li.winner .name::after{
+  content: " 🏆";
+  font-size: 1.1rem;
+}
+
+/* Confetti "popping" around winner */
+#scoreboard-list li.winner::before,
+#scoreboard-list li.winner::after{
+  content: "🎉 ✨ 🎊 ✨ 🎉";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.05rem;
+  opacity: 0;
+  pointer-events: none;
+  animation: confettiPop 1.2s ease-in-out infinite;
+}
+
+#scoreboard-list li.winner::before{ top: 4px; }
+#scoreboard-list li.winner::after{ bottom: 4px; animation-delay: 0.35s; }
+
+@keyframes confettiPop{
+  0%   { opacity: 0; transform: translateX(-50%) scale(0.8); }
+  30%  { opacity: 1; transform: translateX(-50%) scale(1.05); }
+  60%  { opacity: 0.9; transform: translateX(-50%) scale(1); }
+  100% { opacity: 0; transform: translateX(-50%) scale(0.85); }
+}
 
 
 
